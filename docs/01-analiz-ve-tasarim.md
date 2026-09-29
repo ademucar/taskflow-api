@@ -177,9 +177,10 @@ Sistemin tek varlığı **Görev (Task)**'tir. Görevin atandığı çalışan, 
 | Sıralama | `GET /tasks?sort=createdAt` (azalan için `-createdAt`) |
 
 - Parametreler birlikte kullanılabilir: `GET /tasks?status=pending&priority=high&sort=-createdAt&page=1&limit=5`
-- Sıralanabilir alanlar: `createdAt`, `updatedAt`, `title`, `priority`, `status`. `priority` mantıksal sırayla sıralanır (`low < medium < high`).
-- Arama `title` ve `description` alanlarında, büyük/küçük harf ve Türkçe karakter duyarsız yapılır (`işlem` ≈ `islem`).
-- Sayfalama varsayılanı: `page=1`, `limit=10`; `limit` en fazla 100.
+- Sıralanabilir alanlar: `createdAt`, `updatedAt`, `title`, `priority`, `status`. `priority` ve `status` mantıksal sırayla sıralanır (`low < medium < high`, `pending < in-progress < completed`). Virgülle birden fazla alan verilebilir: `sort=-priority,createdAt`.
+- Arama `title` ve `description` alanlarında, büyük/küçük harf ve Türkçe karakter duyarsız yapılır (`işlem` ≈ `ISLEM`). Kullanıcı eşleşmesi de aynı şekilde duyarsızdır (`/tasks/assignee/MUSA`).
+- `page` veya `limit` gönderilmezse **tüm görevler** döner (zorunlu "tüm görevler görüntülenebilmelidir" maddesi). Gönderilirse varsayılanlar `page=1`, `limit=10`; `limit` en fazla 100.
+- Filtre, sayfalama ve sıralama parametreleri `/tasks/search` ve `/tasks/assignee/:assignee` uçlarında da kullanılabilir.
 
 ### 5.3 Validation Middleware — Pratik 2
 

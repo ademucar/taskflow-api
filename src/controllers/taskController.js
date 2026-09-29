@@ -10,10 +10,30 @@ function parseId(req) {
   return id;
 }
 
-// GET /tasks
+// Listeleme yanıtı; sayfalama istendiyse pagination bilgisi eklenir.
+function sendList(res, { items, pagination }) {
+  const body = { success: true, count: items.length };
+  if (pagination) body.pagination = pagination;
+  body.data = items;
+  res.status(200).json(body);
+}
+
+// GET /tasks?status=&priority=&sort=&page=&limit=
 async function getAllTasks(req, res) {
-  const tasks = await taskService.listTasks();
-  res.status(200).json({ success: true, count: tasks.length, data: tasks });
+  sendList(res, await taskService.queryTasks(req.query));
+}
+
+// GET /tasks/search?keyword=
+async function searchTasks(req, res) {
+  if (!req.query.keyword || !String(req.query.keyword).trim()) {
+    throw AppError.badRequest('Arama için keyword parametresi gereklidir. Örnek: /tasks/search?keyword=backend');
+  }
+  sendList(res, await taskService.queryTasks(req.query));
+}
+
+// GET /tasks/assignee/:assignee
+async function getTasksByAssignee(req, res) {
+  sendList(res, await taskService.queryTasks({ ...req.query, assignee: req.params.assignee }));
 }
 
 // GET /tasks/:id
@@ -42,6 +62,8 @@ async function deleteTask(req, res) {
 
 module.exports = {
   getAllTasks,
+  searchTasks,
+  getTasksByAssignee,
   getTaskById,
   createTask,
   updateTask,
