@@ -84,6 +84,7 @@
                   "    pm.expect(task.title).to.eql(\"Postman ile test görevi\");",
                   "    pm.expect(task.priority).to.eql(\"high\");",
                   "    pm.expect(task.assignee).to.eql(\"musa\");",
+                  "    pm.expect(task.project).to.eql(\"TaskFlow API\");",
                   "});",
                   "pm.test(\"Varsayılan durum pending\", () => pm.expect(task.status).to.eql(\"pending\"));",
                   "pm.test(\"createdAt ve updatedAt oluşturuldu\", () => {",
@@ -106,7 +107,7 @@
             "url": "{{baseUrl}}/tasks",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"title\": \"Postman ile test görevi\",\n  \"description\": \"Aşama 4 kapsamında Postman üzerinden oluşturuldu.\",\n  \"priority\": \"high\",\n  \"assignee\": \"musa\"\n}",
+              "raw": "{\n  \"title\": \"Postman ile test görevi\",\n  \"description\": \"Aşama 4 kapsamında Postman üzerinden oluşturuldu.\",\n  \"priority\": \"high\",\n  \"assignee\": \"musa\",\n  \"project\": \"TaskFlow API\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -200,7 +201,7 @@
             "url": "{{baseUrl}}/tasks/{{taskId}}",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"title\": \"Postman ile test görevi (güncellendi)\",\n  \"description\": \"Görev tamamlandı olarak işaretlendi.\",\n  \"status\": \"completed\",\n  \"priority\": \"medium\",\n  \"assignee\": \"musa\"\n}",
+              "raw": "{\n  \"title\": \"Postman ile test görevi (güncellendi)\",\n  \"description\": \"Görev tamamlandı olarak işaretlendi.\",\n  \"status\": \"completed\",\n  \"priority\": \"medium\",\n  \"assignee\": \"musa\",\n  \"project\": \"TaskFlow API\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -383,6 +384,30 @@
             "method": "GET",
             "header": [],
             "url": "{{baseUrl}}/tasks?priority=high"
+          }
+        },
+        {
+          "name": "Projeye Göre Filtrele",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Tüm görevler TaskFlow API projesinde\", () => {",
+                  "    const { data } = pm.response.json();",
+                  "    pm.expect(data.length).to.be.above(0);",
+                  "    data.forEach((t) => pm.expect(t.project).to.eql(\"TaskFlow API\"));",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/tasks?project=TaskFlow%20API"
           }
         },
         {
@@ -850,7 +875,10 @@
                   "    const sum = Object.values(summary.byStatus).reduce((a, b) => a + b, 0);",
                   "    pm.expect(sum).to.eql(summary.totalTasks);",
                   "});",
-                  "pm.test(\"Kişi bazında dağılım var\", () => pm.expect(summary.byAssignee).to.be.an(\"array\"));"
+                  "pm.test(\"Kişi ve proje bazında dağılım var\", () => {",
+                  "    pm.expect(summary.byAssignee).to.be.an(\"array\");",
+                  "    pm.expect(summary.byProject).to.be.an(\"array\");",
+                  "});"
                 ]
               }
             }

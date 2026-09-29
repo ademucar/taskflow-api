@@ -7,7 +7,7 @@ API, **Postman** ile test edilmiştir. Tüm test senaryoları `postman/TaskFlow.
 | | |
 |---|---|
 | **Araç** | Postman (manuel) · Newman (komut satırı) |
-| **Kapsam** | 29 istek · 126 doğrulama |
+| **Kapsam** | 30 istek · 130 doğrulama |
 | **Test verisi** | `npm run seed` ile yüklenen 12 örnek görev |
 | **Ortak kontroller** | Her yanıtta: `Content-Type` JSON olmalı, yanıt süresi < 1 sn |
 
@@ -39,7 +39,7 @@ npm test
 
 | # | Senaryo | İstek | Beklenen | Doğrulananlar | Sonuç |
 |---|---|---|---|---|---|
-| C-01 | Görev ekleme | `POST /tasks` | `201` | `id` sayı olarak atandı; gönderilen `title`, `priority`, `assignee` kaydedildi; `status` varsayılan `pending`; `createdAt` = `updatedAt` | ✅ |
+| C-01 | Görev ekleme | `POST /tasks` | `201` | `id` sayı olarak atandı; gönderilen `title`, `priority`, `assignee`, `project` kaydedildi; `status` varsayılan `pending`; `createdAt` = `updatedAt` | ✅ |
 | C-02 | Görev listeleme | `GET /tasks` | `200` | `data` dizi; `count` = dizi uzunluğu; C-01'de eklenen görev listede | ✅ |
 | C-03 | Görev detayı | `GET /tasks/{{taskId}}` | `200` | Dönen görevin `id` ve `title` değeri doğru | ✅ |
 | C-04 | Görev güncelleme | `PUT /tasks/{{taskId}}` | `200` | `title`, `status` (`completed`), `priority` güncellendi; `updatedAt` ≥ `createdAt` | ✅ |
@@ -54,12 +54,13 @@ npm test
 |---|---|---|---|---|---|
 | F-01 | Duruma göre filtreleme | `GET /tasks?status=completed` | `200` | Sonuç boş değil; tüm görevlerin durumu `completed` | ✅ |
 | F-02 | Önceliğe göre filtreleme | `GET /tasks?priority=high` | `200` | Sonuç boş değil; tüm görevlerin önceliği `high` | ✅ |
-| F-03 | Birleşik filtre | `GET /tasks?status=pending&priority=high` | `200` | Her görev iki koşulu birden sağlıyor | ✅ |
-| F-04 | Görev arama | `GET /tasks/search?keyword=backend` | `200` | Sonuç boş değil; her görevin başlık veya açıklaması "backend" içeriyor | ✅ |
-| F-05 | Kullanıcı bazlı listeleme | `GET /tasks/assignee/musa` | `200` | Sonuç boş değil; tüm görevler `musa`'ya atanmış | ✅ |
-| F-06 | Sayfalama | `GET /tasks?page=1&limit=5` | `200` | En fazla 5 görev; `page`=1, `limit`=5, `totalPages` = ⌈total / 5⌉ | ✅ |
-| F-07 | Tarihe göre artan sıralama | `GET /tasks?sort=createdAt` | `200` | `createdAt` değerleri eskiden yeniye sıralı | ✅ |
-| F-08 | Önceliğe göre azalan sıralama | `GET /tasks?sort=-priority` | `200` | Sıra high → medium → low | ✅ |
+| F-03 | Projeye göre filtreleme *(ek)* | `GET /tasks?project=TaskFlow%20API` | `200` | Sonuç boş değil; tüm görevlerin projesi `TaskFlow API` | ✅ |
+| F-04 | Birleşik filtre | `GET /tasks?status=pending&priority=high` | `200` | Her görev iki koşulu birden sağlıyor | ✅ |
+| F-05 | Görev arama | `GET /tasks/search?keyword=backend` | `200` | Sonuç boş değil; her görevin başlık veya açıklaması "backend" içeriyor | ✅ |
+| F-06 | Kullanıcı bazlı listeleme | `GET /tasks/assignee/musa` | `200` | Sonuç boş değil; tüm görevler `musa`'ya atanmış | ✅ |
+| F-07 | Sayfalama | `GET /tasks?page=1&limit=5` | `200` | En fazla 5 görev; `page`=1, `limit`=5, `totalPages` = ⌈total / 5⌉ | ✅ |
+| F-08 | Tarihe göre artan sıralama | `GET /tasks?sort=createdAt` | `200` | `createdAt` değerleri eskiden yeniye sıralı | ✅ |
+| F-09 | Önceliğe göre azalan sıralama | `GET /tasks?sort=-priority` | `200` | Sıra high → medium → low | ✅ |
 
 ### 2.3 Doğrulama ve Hata Yönetimi (Pratik 2)
 
@@ -81,7 +82,7 @@ npm test
 |---|---|---|---|---|---|
 | R-01 | Tamamlanan görev sayısı | `GET /reports/completed` | `200` | `count` sayı ve ≤ `total`; `percentage` 0–100 arası | ✅ |
 | R-02 | Bekleyen görev sayısı | `GET /reports/pending` | `200` | `breakdown.pending` + `breakdown.in-progress` = `count` | ✅ |
-| R-03 | Genel sistem özeti | `GET /reports/summary` | `200` | `completedTasks` + `pendingTasks` = `totalTasks`; `byStatus` toplamı = `totalTasks`; `byAssignee` dizi | ✅ |
+| R-03 | Genel sistem özeti | `GET /reports/summary` | `200` | `completedTasks` + `pendingTasks` = `totalTasks`; `byStatus` toplamı = `totalTasks`; `byAssignee` ve `byProject` dizi | ✅ |
 
 ---
 
@@ -110,9 +111,9 @@ Postman koleksiyonuna ek olarak geliştirme sırasında şu durumlar da test edi
 │                         │ executed │   failed │
 ├─────────────────────────┼──────────┼──────────┤
 │              iterations │        1 │        0 │
-│                requests │       29 │        0 │
-│            test-scripts │       58 │        0 │
-│              assertions │      126 │        0 │
+│                requests │       30 │        0 │
+│            test-scripts │       60 │        0 │
+│              assertions │      130 │        0 │
 └─────────────────────────┴──────────┴──────────┘
 ```
 

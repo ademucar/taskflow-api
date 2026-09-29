@@ -16,6 +16,7 @@ const taskBodySchema = {
   status: { type: 'string', enum: TASK_STATUSES },
   priority: { type: 'string', enum: TASK_PRIORITIES },
   assignee: assigneeRule,
+  project: { type: 'string', minLength: 2, maxLength: 50 },
 };
 
 // PATCH /tasks/:id/status gövdesi
@@ -42,6 +43,7 @@ const assigneeParamSchema = {
 const taskQuerySchema = {
   status: { type: 'string', enum: TASK_STATUSES },
   priority: { type: 'string', enum: TASK_PRIORITIES },
+  project: { type: 'string', maxLength: 50 },
   keyword: { type: 'string', maxLength: 100 },
   sort: { type: 'string', maxLength: 100 },
   page: { type: 'integer', min: 1 },

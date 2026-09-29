@@ -54,6 +54,7 @@ const { data: task } = await api('POST', '/tasks', {
   description: 'Hero alanı ve menü hazırlanacak.',
   priority: 'high',
   assignee: 'zeynep',
+  project: 'Web Paneli',
 });
 
 console.log(task.id); // → 13
@@ -61,6 +62,7 @@ console.log(task.id); // → 13
 
 - `title` ve `assignee` zorunludur.
 - `status` gönderilmezse `pending`, `priority` gönderilmezse `medium` olur.
+- `project` isteğe bağlıdır; gönderilmezse görev projesiz (`null`) kaydedilir.
 
 ---
 
@@ -86,8 +88,8 @@ Başlık, açıklama gibi birden fazla alanı değiştirmek için `PUT` kullanı
 ```js
 await api('PUT', `/tasks/${task.id}`, { ...editable(task), title: 'Ana sayfa tasarımı (v2)' });
 
-function editable({ title, description, status, priority, assignee }) {
-  return { title, description, status, priority, assignee };
+function editable({ title, description, status, priority, assignee, project }) {
+  return { title, description, status, priority, assignee, project };
 }
 ```
 
@@ -106,6 +108,9 @@ const urgent = await api('GET', '/tasks?status=pending&priority=high&sort=-creat
 
 // Bir çalışanın görevleri
 const myTasks = await api('GET', '/tasks/assignee/zeynep');
+
+// Bir projenin görevleri
+const panelTasks = await api('GET', `/tasks?project=${encodeURIComponent('Web Paneli')}`);
 
 // Arama kutusu
 const results = await api('GET', `/tasks/search?keyword=${encodeURIComponent('tasarım')}`);
@@ -150,6 +155,10 @@ console.log(`Tamamlanma oranı: %${summary.completionRate}`);
 
 for (const person of summary.byAssignee) {
   console.log(`${person.assignee}: ${person.pending} bekleyen, %${person.completionRate} tamamlandı`);
+}
+
+for (const item of summary.byProject) {
+  console.log(`${item.project ?? 'Projesiz'}: %${item.completionRate} tamamlandı`);
 }
 ```
 
@@ -205,7 +214,7 @@ Silinen görevin id'si bir daha kullanılmaz; yeni görevler her zaman yeni bir 
 | Durum değiştir | `PATCH /tasks/:id/status` |
 | Ata | `PATCH /tasks/:id/assign` |
 | Sil | `DELETE /tasks/:id` |
-| Filtrele | `GET /tasks?status=&priority=` |
+| Filtrele | `GET /tasks?status=&priority=&project=` |
 | Sırala | `GET /tasks?sort=-createdAt` |
 | Sayfala | `GET /tasks?page=1&limit=10` |
 | Ara | `GET /tasks/search?keyword=` |

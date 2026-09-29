@@ -16,6 +16,7 @@ Bir yazılım ekibinin görevlerini oluşturmasını, çalışanlara atamasını
 | **Zorunlu** | Logger middleware — her isteğin method, endpoint ve zaman damgası konsola ve dosyaya yazılır |
 | **Zorunlu** | Postman test koleksiyonu |
 | Ek | Görev takibi — durum değiştirme ve çalışana atama için ayrı `PATCH` uçları |
+| Ek | Görevlerin ait olduğu proje (`project`) — projeye göre filtreleme ve proje bazlı rapor |
 | Pratik 1 | Duruma / önceliğe göre filtreleme, arama, kullanıcı bazlı listeleme, sayfalama, sıralama |
 | Pratik 2 | Validation middleware — geçersiz veride açıklayıcı mesajla `400 Bad Request` |
 | Pratik 3 | Raporlama servisleri — tamamlanan, bekleyen görev sayıları ve genel özet |
@@ -103,6 +104,7 @@ Sunucu varsayılan olarak **http://localhost:3000** adresinde çalışır. Taray
 ```
 ?status=completed          pending | in-progress | completed
 ?priority=high             low | medium | high
+?project=TaskFlow API      proje adına göre (büyük/küçük harf duyarsız)
 ?sort=-createdAt           createdAt, updatedAt, title, priority, status (- ile azalan)
 ?page=1&limit=10           sayfalama (limit en fazla 100)
 ```
@@ -114,7 +116,7 @@ Tüm detaylar, istek / yanıt örnekleri ve hata kodları için: **[API Doküman
 ```bash
 curl -X POST http://localhost:3000/tasks \
   -H "Content-Type: application/json" \
-  -d '{"title": "Login sayfasını tasarla", "priority": "high", "assignee": "musa"}'
+  -d '{"title": "Login sayfasını tasarla", "priority": "high", "assignee": "musa", "project": "TaskFlow API"}'
 ```
 
 ```json
@@ -128,6 +130,7 @@ curl -X POST http://localhost:3000/tasks \
     "status": "pending",
     "priority": "high",
     "assignee": "musa",
+    "project": "TaskFlow API",
     "createdAt": "2026-10-12T09:41:07.312Z",
     "updatedAt": "2026-10-12T09:41:07.312Z"
   }
@@ -152,7 +155,7 @@ Koleksiyon 5 klasörden oluşur: Sistem, Görev CRUD, Filtreleme / Arama / Sayfa
 npm test
 ```
 
-Bu komut, gerçek veriye dokunmadan geçici bir veri dosyasıyla sunucuyu başlatır ve Postman koleksiyonunu [Newman](https://github.com/postmanlabs/newman) ile komut satırından çalıştırır (29 istek, 126 doğrulama).
+Bu komut, gerçek veriye dokunmadan geçici bir veri dosyasıyla sunucuyu başlatır ve Postman koleksiyonunu [Newman](https://github.com/postmanlabs/newman) ile komut satırından çalıştırır (30 istek, 130 doğrulama).
 
 Test senaryolarının yazılı açıklaması: **[Test Dokümantasyonu](docs/test-senaryolari.md)**
 

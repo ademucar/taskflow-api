@@ -14,16 +14,18 @@ const {
 // Sorgulama: filtreleme → arama → sıralama → sayfalama
 // ---------------------------------------------------------------------------
 
-function applyFilters(tasks, { status, priority, assignee, keyword }) {
+function applyFilters(tasks, { status, priority, assignee, project, keyword }) {
   const statusKey = status?.trim();
   const priorityKey = priority?.trim();
   const assigneeKey = assignee && normalizeText(assignee.trim());
+  const projectKey = project && normalizeText(project.trim());
   const keywordKey = keyword && normalizeText(keyword.trim());
 
   return tasks.filter((task) => {
     if (statusKey && task.status !== statusKey) return false;
     if (priorityKey && task.priority !== priorityKey) return false;
     if (assigneeKey && normalizeText(task.assignee) !== assigneeKey) return false;
+    if (projectKey && (!task.project || normalizeText(task.project) !== projectKey)) return false;
     if (keywordKey) {
       const haystack = normalizeText(`${task.title} ${task.description}`);
       if (!haystack.includes(keywordKey)) return false;
@@ -121,6 +123,7 @@ function buildTaskFields(input) {
     status: input.status?.trim() || DEFAULT_STATUS,
     priority: input.priority?.trim() || DEFAULT_PRIORITY,
     assignee: input.assignee.trim(),
+    project: input.project?.trim() || null,
   };
 }
 

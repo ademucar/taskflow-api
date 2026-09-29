@@ -17,14 +17,19 @@ function countBy(tasks, field, keys) {
   return counts;
 }
 
-// Kişi bazında görev dağılımı; en çok görevi olan en üstte.
-function groupByAssignee(tasks) {
+/**
+ * Görevleri bir alana göre (assignee, project) gruplar ve her grup için
+ * toplam, tamamlanan, bekleyen sayılarını hesaplar. En çok görevi olan en üstte.
+ * Projesi olmayan görevler "project: null" grubunda toplanır.
+ */
+function groupBy(tasks, field) {
   const groups = new Map();
 
   for (const task of tasks) {
-    const key = normalizeText(task.assignee);
+    const value = task[field] ?? null;
+    const key = value === null ? '' : normalizeText(value);
     if (!groups.has(key)) {
-      groups.set(key, { assignee: task.assignee, total: 0, completed: 0, pending: 0 });
+      groups.set(key, { [field]: value, total: 0, completed: 0, pending: 0 });
     }
     const group = groups.get(key);
     group.total += 1;
@@ -32,9 +37,15 @@ function groupByAssignee(tasks) {
     else group.pending += 1;
   }
 
+  const byName = (a, b) => {
+    if (a[field] === null) return 1; // projesiz grup en sonda
+    if (b[field] === null) return -1;
+    return a[field].localeCompare(b[field], 'tr');
+  };
+
   return [...groups.values()]
     .map((group) => ({ ...group, completionRate: percentage(group.completed, group.total) }))
-    .sort((a, b) => b.total - a.total || a.assignee.localeCompare(b.assignee, 'tr'));
+    .sort((a, b) => b.total - a.total || byName(a, b));
 }
 
 // GET /reports/completed
@@ -78,7 +89,8 @@ async function getSummaryReport() {
     completionRate: percentage(completed, tasks.length),
     byStatus: countBy(tasks, 'status', TASK_STATUSES),
     byPriority: countBy(tasks, 'priority', TASK_PRIORITIES),
-    byAssignee: groupByAssignee(tasks),
+    byAssignee: groupBy(tasks, 'assignee'),
+    byProject: groupBy(tasks, 'project'),
     generatedAt: new Date().toISOString(),
   };
 }

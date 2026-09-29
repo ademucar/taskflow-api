@@ -45,7 +45,7 @@ Tüm isteğe bağlı pratikler projede uygulanacaktır.
 
 ## 3. Veri Modeli Tasarımı
 
-Sistemin tek varlığı **Görev (Task)**'tir. Görevin atandığı çalışan, yönergedeki örneğe uygun olarak (`/tasks/assignee/musa`) kullanıcı adıyla tutulur.
+Sistemin tek varlığı **Görev (Task)**'tir. Görevin atandığı çalışan, yönergedeki örneğe uygun olarak (`/tasks/assignee/musa`) kullanıcı adıyla tutulur. Senaryodaki "projeleri takip etme" ihtiyacı için her görev bir projeye (`project`) bağlanabilir.
 
 | Alan | Tip | Zorunlu | Kurallar | Varsayılan |
 |---|---|---|---|---|
@@ -55,6 +55,7 @@ Sistemin tek varlığı **Görev (Task)**'tir. Görevin atandığı çalışan, 
 | `status` | string | | `pending`, `in-progress`, `completed` | `pending` |
 | `priority` | string | | `low`, `medium`, `high` | `medium` |
 | `assignee` | string | ✔ | 2–50 karakter; harf, rakam, `.`, `_`, `-` | — |
+| `project` | string | null | | 2–50 karakter. Görevin ait olduğu proje *(ek)* | `null` |
 | `createdAt` | string (ISO 8601) | otomatik | Oluşturulma zamanı | — |
 | `updatedAt` | string (ISO 8601) | otomatik | Son güncelleme zamanı | — |
 
@@ -68,6 +69,7 @@ Sistemin tek varlığı **Görev (Task)**'tir. Görevin atandığı çalışan, 
   "status": "in-progress",
   "priority": "high",
   "assignee": "musa",
+  "project": "TaskFlow API",
   "createdAt": "2026-10-10T09:15:00.000Z",
   "updatedAt": "2026-10-11T14:02:00.000Z"
 }
@@ -178,6 +180,7 @@ Sistemin tek varlığı **Görev (Task)**'tir. Görevin atandığı çalışan, 
 |---|---|
 | Duruma göre filtreleme | `GET /tasks?status=completed` |
 | Önceliğe göre filtreleme | `GET /tasks?priority=high` |
+| Projeye göre filtreleme *(ek)* | `GET /tasks?project=TaskFlow API` |
 | Görev arama | `GET /tasks/search?keyword=backend` |
 | Kullanıcı bazlı listeleme | `GET /tasks/assignee/musa` |
 | Sayfalama | `GET /tasks?page=1&limit=10` |
@@ -197,6 +200,7 @@ Sistemin tek varlığı **Görev (Task)**'tir. Görevin atandığı çalışan, 
 | `description` | Metin, en fazla 500 karakter | 400 |
 | `priority` | `low`, `medium`, `high` | 400 |
 | `assignee` | Zorunlu, metin, 2–50 karakter | 400 |
+| `project` *(ek)* | Metin, 2–50 karakter | 400 |
 
 Ayrıca `status` değerinin geçerliliği, tanımsız alan gönderilmesi ve sorgu parametreleri (`status`, `priority`, `page`, `limit`, `sort`) de doğrulanır.
 
@@ -206,7 +210,7 @@ Ayrıca `status` değerinin geçerliliği, tanımsız alan gönderilmesi ve sorg
 |---|---|---|
 | `GET` | `/reports/completed` | Tamamlanan görev sayısı, toplam içindeki yüzdesi |
 | `GET` | `/reports/pending` | Bekleyen (tamamlanmamış) görev sayısı, `pending` / `in-progress` kırılımı, yüksek öncelikli bekleyen sayısı |
-| `GET` | `/reports/summary` | Genel sistem özeti: toplam / tamamlanan / bekleyen görev, tamamlanma oranı, duruma ve önceliğe göre dağılım, kişi bazında görev ve tamamlanma oranı |
+| `GET` | `/reports/summary` | Genel sistem özeti: toplam / tamamlanan / bekleyen görev, tamamlanma oranı, duruma ve önceliğe göre dağılım, kişi ve proje bazında görev ve tamamlanma oranı |
 
 ---
 

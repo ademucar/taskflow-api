@@ -37,6 +37,7 @@ Her görev; başlık (`title`), açıklama (`description`), durum (`status`: *pe
 | Özellik | Endpoint / Açıklama |
 |---|---|
 | Durum değiştirme ve çalışana atama | `PATCH /tasks/:id/status`, `PATCH /tasks/:id/assign` |
+| Görevleri projelere bağlama | `project` alanı, `GET /tasks?project=TaskFlow API` |
 | Duruma ve önceliğe göre filtreleme | `GET /tasks?status=completed&priority=high` |
 | Görev arama | `GET /tasks/search?keyword=backend` |
 | Kullanıcı bazlı listeleme | `GET /tasks/assignee/musa` |
@@ -63,7 +64,7 @@ Tüm yanıtlar tutarlı bir formatta döner (`success`, `data`, `message`, `erro
 
 ## 5. Test
 
-Tüm endpoint'ler Postman ile test edilmiştir. Proje ile birlikte teslim edilen Postman koleksiyonu 29 istek ve 126 otomatik doğrulama içerir; CRUD işlemlerini, filtreleme ve raporları, hatalı istekleri (eksik alan, geçersiz değer, bozuk JSON, olmayan kayıt) kapsar. Koleksiyon `npm test` komutuyla Newman üzerinden komut satırından da çalıştırılabilir. Ekran görüntüleri `docs/screenshots` klasöründedir.
+Tüm endpoint'ler Postman ile test edilmiştir. Proje ile birlikte teslim edilen Postman koleksiyonu 30 istek ve 130 otomatik doğrulama içerir; CRUD işlemlerini, filtreleme ve raporları, hatalı istekleri (eksik alan, geçersiz değer, bozuk JSON, olmayan kayıt) kapsar. Koleksiyon `npm test` komutuyla Newman üzerinden komut satırından da çalıştırılabilir. Ekran görüntüleri `docs/screenshots` klasöründedir.
 
 ## 6. Yönerge Karşılama Tablosu
 

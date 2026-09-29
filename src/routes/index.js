@@ -24,7 +24,7 @@ router.get('/', (req, res) => {
           delete: 'DELETE /tasks/:id',
           search: 'GET /tasks/search?keyword=',
           byAssignee: 'GET /tasks/assignee/:assignee',
-          queryParams: 'status, priority, sort, page, limit',
+          queryParams: 'status, priority, project, keyword, sort, page, limit',
         },
         reports: {
           completed: 'GET /reports/completed',

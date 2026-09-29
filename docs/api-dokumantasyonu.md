@@ -77,6 +77,7 @@
 | `status` | string | `pending` · `in-progress` · `completed` |
 | `priority` | string | `low` · `medium` · `high` |
 | `assignee` | string | Görevin atandığı çalışanın kullanıcı adı |
+| `project` | string | null | Görevin ait olduğu proje; projesiz görevlerde `null` |
 | `createdAt` | string | Oluşturulma zamanı (ISO 8601, UTC) |
 | `updatedAt` | string | Son güncellenme zamanı (ISO 8601, UTC) |
 
@@ -89,9 +90,11 @@
 | `status` | | `pending`, `in-progress`, `completed` | `pending` |
 | `priority` | | `low`, `medium`, `high` | `medium` |
 | `assignee` | ✔ | Metin, 2–50 karakter; harf, rakam, `.` `_` `-` (boşluk yok) | — |
+| `project` | | Metin, 2–50 karakter | `null` |
 
 - Metin alanlarının başındaki ve sonundaki boşluklar temizlenir.
-- Bu beş alan dışında bir alan gönderilirse (ör. `id`, `createdAt`) istek `400` ile reddedilir.
+- İsteğe bağlı bir alana `null` veya boş metin gönderilirse alan varsayılan değerini alır. Böylece `GET` ile alınan bir görev `PUT` ile olduğu gibi geri gönderilebilir.
+- Bu altı alan dışında bir alan gönderilirse (ör. `id`, `createdAt`) istek `400` ile reddedilir.
 
 ---
 
@@ -109,7 +112,8 @@ Content-Type: application/json
   "title": "Login sayfasını tasarla",
   "description": "Kullanıcı adı ve şifre alanları olan giriş ekranı.",
   "priority": "high",
-  "assignee": "musa"
+  "assignee": "musa",
+  "project": "TaskFlow API"
 }
 ```
 
@@ -126,6 +130,7 @@ Content-Type: application/json
     "status": "pending",
     "priority": "high",
     "assignee": "musa",
+    "project": "TaskFlow API",
     "createdAt": "2026-10-12T09:41:07.312Z",
     "updatedAt": "2026-10-12T09:41:07.312Z"
   }
@@ -146,6 +151,7 @@ Parametre gönderilmezse **tüm görevler** döner.
 |---|---|---|
 | `status` | `status=completed` | Duruma göre filtreler |
 | `priority` | `priority=high` | Önceliğe göre filtreler |
+| `project` | `project=TaskFlow API` | Projeye göre filtreler (büyük / küçük harf ve Türkçe karakter duyarsız) |
 | `keyword` | `keyword=login` | Başlık ve açıklamada arar |
 | `sort` | `sort=-createdAt` | Sıralama. Alanlar: `createdAt`, `updatedAt`, `title`, `priority`, `status`. Başına `-` konursa azalan sıralar. Virgülle birden fazla alan: `sort=-priority,createdAt` |
 | `page` | `page=2` | Sayfa numarası (≥ 1, varsayılan 1) |
@@ -174,6 +180,7 @@ GET /tasks?status=pending&priority=high&sort=-createdAt&page=1&limit=2
       "status": "pending",
       "priority": "high",
       "assignee": "can",
+      "project": "TaskFlow API",
       "createdAt": "2026-09-28T22:00:00.000Z",
       "updatedAt": "2026-09-28T22:00:00.000Z"
     }
@@ -213,6 +220,7 @@ GET /tasks/3
     "status": "in-progress",
     "priority": "high",
     "assignee": "musa",
+    "project": "TaskFlow API",
     "createdAt": "2026-09-26T14:00:00.000Z",
     "updatedAt": "2026-09-26T19:00:00.000Z"
   }
@@ -243,7 +251,8 @@ Content-Type: application/json
   "description": "Tüm CRUD uçları tamamlandı.",
   "status": "completed",
   "priority": "high",
-  "assignee": "musa"
+  "assignee": "musa",
+  "project": "TaskFlow API"
 }
 ```
 
@@ -260,6 +269,7 @@ Content-Type: application/json
     "status": "completed",
     "priority": "high",
     "assignee": "musa",
+    "project": "TaskFlow API",
     "createdAt": "2026-09-26T14:00:00.000Z",
     "updatedAt": "2026-10-12T10:05:44.120Z"
   }
@@ -298,6 +308,7 @@ Content-Type: application/json
     "status": "in-progress",
     "priority": "medium",
     "assignee": "mehmet",
+    "project": "Test ve Dokümantasyon",
     "createdAt": "2026-09-27T18:00:00.000Z",
     "updatedAt": "2026-10-12T10:20:15.402Z"
   }
@@ -336,6 +347,7 @@ Content-Type: application/json
     "status": "in-progress",
     "priority": "medium",
     "assignee": "zeynep",
+    "project": "Test ve Dokümantasyon",
     "createdAt": "2026-09-27T18:00:00.000Z",
     "updatedAt": "2026-10-12T10:21:02.118Z"
   }
@@ -365,6 +377,7 @@ DELETE /tasks/12
     "status": "in-progress",
     "priority": "low",
     "assignee": "can",
+    "project": "TaskFlow API",
     "createdAt": "2026-09-29T05:00:00.000Z",
     "updatedAt": "2026-09-29T10:00:00.000Z"
   }
@@ -403,6 +416,7 @@ GET /tasks/search?keyword=backend
       "status": "in-progress",
       "priority": "high",
       "assignee": "musa",
+      "project": "TaskFlow API",
       "createdAt": "2026-09-26T14:00:00.000Z",
       "updatedAt": "2026-09-26T19:00:00.000Z"
     },
@@ -413,6 +427,7 @@ GET /tasks/search?keyword=backend
       "status": "pending",
       "priority": "low",
       "assignee": "zeynep",
+      "project": "TaskFlow API",
       "createdAt": "2026-09-28T08:00:00.000Z",
       "updatedAt": "2026-09-28T08:00:00.000Z"
     }
@@ -489,12 +504,16 @@ Bekleyen görev: durumu `completed` **olmayan** (`pending` veya `in-progress`) g
       { "assignee": "mehmet", "total": 2, "completed": 0, "pending": 2, "completionRate": 0 },
       { "assignee": "zeynep", "total": 2, "completed": 1, "pending": 1, "completionRate": 50 }
     ],
+    "byProject": [
+      { "project": "TaskFlow API", "total": 9, "completed": 3, "pending": 6, "completionRate": 33.3 },
+      { "project": "Test ve Dokümantasyon", "total": 3, "completed": 1, "pending": 2, "completionRate": 33.3 }
+    ],
     "generatedAt": "2026-10-12T10:12:30.004Z"
   }
 }
 ```
 
-`byAssignee` en çok görevi olan çalışandan başlayarak sıralanır.
+`byAssignee` ve `byProject` en çok görevi olandan başlayarak sıralanır. Projesi olmayan görevler `byProject` içinde `"project": null` grubunda, listenin sonunda yer alır.
 
 ---
 
