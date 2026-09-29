@@ -72,7 +72,7 @@ Tüm endpoint'ler Postman ile test edilmiştir. Proje ile birlikte teslim edilen
 |---|---|
 | CRUD İşlemleri (30) | `src/routes/taskRoutes.js`, `src/controllers/taskController.js`, `src/services/taskService.js` |
 | Routing Yapısı (15) | `src/routes/` — ana router, `/tasks` ve `/reports` modülleri |
-| Temel Middleware – Logger (15) | `src/middlewares/logger.js` |
+| Temel Middleware – Logger (15) | `src/middlewares/logger.js` — method, endpoint, zaman damgası, status ve süre; konsol + `logs/requests.log`. Örnek çıktı README'de |
 | Kod Kalitesi (15) | Katmanlı mimari, merkezi hata yönetimi, sabitler, tutarlı yanıt formatı |
 | Dokümantasyon (15) | Bu doküman, `README.md`, `docs/` klasörü |
 | Test Süreçleri – Postman (10) | `postman/TaskFlow.postman_collection.json`, `docs/screenshots/`, `docs/test-senaryolari.md` |

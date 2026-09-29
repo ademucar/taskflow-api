@@ -139,6 +139,28 @@ curl -X POST http://localhost:3000/tasks \
 
 ---
 
+## Logger
+
+Tüm API istekleri [`src/middlewares/logger.js`](src/middlewares/logger.js) tarafından kayıt altına alınır. Her satırda **zaman damgası, method ve endpoint**; ayrıca yanıtın status kodu ve süresi bulunur.
+
+- **Konsol:** Status koduna göre renklendirilmiş çıktı (2xx yeşil, 4xx sarı, 5xx kırmızı)
+- **Dosya:** `logs/requests.log` (klasör ilk istekte otomatik oluşur)
+- Yanıt gönderilmeden bağlantısı kopan istekler de `aborted` olarak kaydedilir.
+
+Örnek çıktı:
+
+```
+[2026-10-12T09:41:07.312Z] GET /tasks 200 - 3.18 ms
+[2026-10-12T09:41:09.027Z] GET /tasks?status=pending&priority=high 200 - 1.42 ms
+[2026-10-12T09:41:12.845Z] POST /tasks 201 - 9.57 ms
+[2026-10-12T09:41:15.110Z] PUT /tasks/13 200 - 6.21 ms
+[2026-10-12T09:41:18.664Z] GET /tasks/999 404 - 1.05 ms
+[2026-10-12T09:41:21.392Z] POST /tasks 400 - 2.33 ms
+[2026-10-12T09:41:24.901Z] DELETE /tasks/13 200 - 5.74 ms
+```
+
+---
+
 ## Test
 
 ### Postman ile
@@ -208,12 +230,32 @@ Postman test ekran görüntüleri [`docs/screenshots`](docs/screenshots) klasör
 
 ---
 
+## Geliştirme Süreci
+
+Proje, yönergedeki yol haritasına göre aşama aşama geliştirilmiş ve her aşama ayrı commit olarak kaydedilmiştir (`git log` ile görülebilir).
+
+| Aşama | Yapılanlar |
+|---|---|
+| **Aşama 01** — İhtiyaç Analizi ve Sistem Tasarımı | Senaryo, veri modeli, API tasarımı, endpoint listesi |
+| **Aşama 02** — Backend Altyapısı | Node.js projesi, Express kurulumu, klasör yapısı, routing, 404 ve hata yönetimi |
+| **Aşama 03** — CRUD + Temel Middleware | Görev CRUD işlemleri, fs tabanlı veri katmanı, logger middleware |
+| **Aşama 04** — Test ve Teslim | Postman koleksiyonu, Newman ile otomatik test, dokümantasyon |
+| Pratik 1 — Gelişmiş API Özellikleri | Filtreleme, arama, kullanıcı bazlı listeleme, sayfalama, sıralama |
+| Pratik 2 — Validation Middleware | Şema tabanlı doğrulama, alan bazlı 400 hataları |
+| Pratik 3 — Raporlama Servisleri | Tamamlanan / bekleyen görev sayıları, genel özet |
+| Pratik 4 — Kapsamlı Dokümantasyon | API, test ve kullanım kılavuzu dokümanları |
+| Ek — Görev Takibi ve Projeler | Durum / atama için `PATCH` uçları, görevlerin projelere bağlanması |
+
+---
+
 ## Dokümanlar
 
 | Doküman | Açıklama |
 |---|---|
 | [Proje Tanıtım Dokümanı](docs/proje-tanitim.md) | Amaç, senaryo ve sistem özeti |
-| [İhtiyaç Analizi ve Sistem Tasarımı](docs/01-analiz-ve-tasarim.md) | Veri modeli, API mimarisi, endpoint listesi |
+| [İhtiyaç Analizi ve Sistem Tasarımı](docs/01-analiz-ve-tasarim.md) | Senaryo, gereksinimler ve endpoint listesi |
+| ↳ [Veri Modeli Tasarımı](docs/01-analiz-ve-tasarim.md#3-veri-modeli-tasarımı) | Görev alanları, tipleri ve kuralları |
+| ↳ [API Tasarım Dokümanı](docs/01-analiz-ve-tasarim.md#4-api-tasarımı) | Katmanlı mimari, middleware zinciri, yanıt formatı, status kodları |
 | [API Dokümantasyonu](docs/api-dokumantasyonu.md) | Her endpoint için açıklama, istek ve yanıt örnekleri |
 | [Test Dokümantasyonu](docs/test-senaryolari.md) | Yazılı test senaryoları ve sonuçları |
 | [Kullanım Kılavuzu](docs/kullanim-kilavuzu.md) | API'nin bir uygulamaya adım adım entegrasyonu |

@@ -1,6 +1,19 @@
 # TaskFlow — İhtiyaç Analizi ve Sistem Tasarımı
 
-> **Aşama 01 çıktısı:** Sistem senaryosu · Veri modeli tasarımı · API tasarımı · Endpoint listesi
+> **Aşama 01 — İhtiyaç Analizi ve Sistem Tasarımı** çıktısıdır.
+
+| Yönergedeki Aşama 1 adımı | Bu dokümandaki karşılığı |
+|---|---|
+| Sistem senaryosunun oluşturulması | [1. Senaryo](#1-senaryo), [2. Gereksinimler](#2-gereksinimler) |
+| Veri yapılarının belirlenmesi | [3. Veri Modeli Tasarımı](#3-veri-modeli-tasarımı) |
+| API mimarisinin planlanması | [4. API Tasarımı](#4-api-tasarımı) |
+| Endpoint listesinin hazırlanması | [5. Endpoint Listesi](#5-endpoint-listesi) |
+
+| Yönergedeki Aşama 1 çıktısı | Konum |
+|---|---|
+| Proje Tanıtım Dokümanı | [proje-tanitim.md](proje-tanitim.md) |
+| Veri Modeli Tasarımı | Bu doküman, [bölüm 3](#3-veri-modeli-tasarımı) |
+| API Tasarım Dokümanı | Bu doküman, [bölüm 4–5](#4-api-tasarımı) · ayrıntılı istek / yanıt örnekleri: [api-dokumantasyonu.md](api-dokumantasyonu.md) |
 
 ---
 
@@ -84,9 +97,9 @@ Sistemin tek varlığı **Görev (Task)**'tir. Görevin atandığı çalışan, 
 
 ---
 
-## 4. API Mimarisi
+## 4. API Tasarımı
 
-### 4.1 Katmanlı Yapı
+### 4.1 Katmanlı Yapı (API Mimarisi)
 
 ```
 İstek ─► Middleware'ler ─► Route ─► Controller ─► Service ─► Repository ─► data/tasks.json
@@ -222,16 +235,19 @@ backend-proje/
 │   ├── app.js              # Express uygulaması ve middleware zinciri
 │   ├── server.js           # Sunucuyu başlatır
 │   ├── config/             # Port, dosya yolları
-│   ├── constants/          # Durum ve öncelik sabitleri
+│   ├── constants/          # Durum, öncelik, sıralama sabitleri
 │   ├── routes/             # tasks ve reports route'ları
 │   ├── controllers/        # HTTP katmanı
 │   ├── services/           # İş mantığı
 │   ├── repositories/       # fs ile JSON veri erişimi
 │   ├── middlewares/        # logger, validate, notFound, errorHandler
-│   └── utils/              # Yardımcılar (AppError vb.)
+│   ├── validators/         # Doğrulama şemaları
+│   └── utils/              # Yardımcılar (AppError, metin normalizasyonu)
 ├── data/tasks.json         # Kalıcı veri
-├── logs/                   # Logger çıktıları
-├── scripts/seed.js         # Örnek veriyi yükler
+├── logs/                   # Logger çıktıları (otomatik oluşur)
+├── scripts/
+│   ├── seed.js             # Örnek veriyi yükler
+│   └── run-tests.js        # Postman koleksiyonunu Newman ile çalıştırır
 ├── postman/                # Postman test koleksiyonu
 ├── docs/                   # Tanıtım, tasarım, API, test dokümanları ve ekran görüntüleri
 ├── package.json

@@ -101,6 +101,7 @@ Postman koleksiyonuna ek olarak geliştirme sırasında şu durumlar da test edi
 | `limit=500` | `400` — en fazla 100 ✅ |
 | Boş veride raporlar | Tüm sayılar 0, hata yok ✅ |
 | Logger çıktısı | Her istek konsola ve `logs/requests.log` dosyasına yazıldı ✅ |
+| Yanıt gönderilmeden kopan istek | Logger'da `aborted` olarak kaydedildi, sunucu etkilenmedi ✅ |
 
 ---
 
