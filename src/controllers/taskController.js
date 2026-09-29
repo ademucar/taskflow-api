@@ -1,14 +1,7 @@
 const taskService = require('../services/taskService');
-const AppError = require('../utils/AppError');
 
-// URL'deki :id parametresini pozitif tam sayıya çevirir.
-function parseId(req) {
-  const id = Number(req.params.id);
-  if (!Number.isInteger(id) || id < 1) {
-    throw AppError.badRequest(`Geçersiz görev id'si: "${req.params.id}". Pozitif bir tam sayı olmalıdır.`);
-  }
-  return id;
-}
+// Girdiler route seviyesinde validate middleware'i ile doğrulandığı için
+// controller'lar yalnızca service'i çağırıp yanıtı oluşturur.
 
 // Listeleme yanıtı; sayfalama istendiyse pagination bilgisi eklenir.
 function sendList(res, { items, pagination }) {
@@ -25,9 +18,6 @@ async function getAllTasks(req, res) {
 
 // GET /tasks/search?keyword=
 async function searchTasks(req, res) {
-  if (!req.query.keyword || !String(req.query.keyword).trim()) {
-    throw AppError.badRequest('Arama için keyword parametresi gereklidir. Örnek: /tasks/search?keyword=backend');
-  }
   sendList(res, await taskService.queryTasks(req.query));
 }
 
@@ -38,25 +28,25 @@ async function getTasksByAssignee(req, res) {
 
 // GET /tasks/:id
 async function getTaskById(req, res) {
-  const task = await taskService.getTaskById(parseId(req));
+  const task = await taskService.getTaskById(Number(req.params.id));
   res.status(200).json({ success: true, data: task });
 }
 
 // POST /tasks
 async function createTask(req, res) {
-  const task = await taskService.createTask(req.body ?? {});
+  const task = await taskService.createTask(req.body);
   res.status(201).json({ success: true, message: 'Görev oluşturuldu.', data: task });
 }
 
 // PUT /tasks/:id
 async function updateTask(req, res) {
-  const task = await taskService.updateTask(parseId(req), req.body ?? {});
+  const task = await taskService.updateTask(Number(req.params.id), req.body);
   res.status(200).json({ success: true, message: 'Görev güncellendi.', data: task });
 }
 
 // DELETE /tasks/:id
 async function deleteTask(req, res) {
-  const task = await taskService.deleteTask(parseId(req));
+  const task = await taskService.deleteTask(Number(req.params.id));
   res.status(200).json({ success: true, message: 'Görev silindi.', data: task });
 }
 

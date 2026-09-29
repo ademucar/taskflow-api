@@ -15,12 +15,14 @@ const {
 // ---------------------------------------------------------------------------
 
 function applyFilters(tasks, { status, priority, assignee, keyword }) {
-  const assigneeKey = assignee && normalizeText(assignee);
-  const keywordKey = keyword && normalizeText(keyword);
+  const statusKey = status?.trim();
+  const priorityKey = priority?.trim();
+  const assigneeKey = assignee && normalizeText(assignee.trim());
+  const keywordKey = keyword && normalizeText(keyword.trim());
 
   return tasks.filter((task) => {
-    if (status && task.status !== status) return false;
-    if (priority && task.priority !== priority) return false;
+    if (statusKey && task.status !== statusKey) return false;
+    if (priorityKey && task.priority !== priorityKey) return false;
     if (assigneeKey && normalizeText(task.assignee) !== assigneeKey) return false;
     if (keywordKey) {
       const haystack = normalizeText(`${task.title} ${task.description}`);
@@ -110,28 +112,16 @@ async function queryTasks(options = {}) {
 // CRUD
 // ---------------------------------------------------------------------------
 
-// İstemciden gelen veriden kaydedilecek görev alanlarını oluşturur.
+// Doğrulanmış istek gövdesinden kaydedilecek görev alanlarını oluşturur.
 // PUT tam güncelleme olduğu için gönderilmeyen alanlar varsayılana döner.
 function buildTaskFields(input) {
   return {
     title: input.title.trim(),
     description: (input.description ?? '').trim(),
-    status: input.status ?? DEFAULT_STATUS,
-    priority: input.priority ?? DEFAULT_PRIORITY,
+    status: input.status?.trim() || DEFAULT_STATUS,
+    priority: input.priority?.trim() || DEFAULT_PRIORITY,
     assignee: input.assignee.trim(),
   };
-}
-
-function assertRequiredFields(input) {
-  const missing = ['title', 'assignee'].filter(
-    (field) => typeof input[field] !== 'string' || input[field].trim() === '',
-  );
-  if (missing.length > 0) {
-    throw AppError.badRequest(
-      'Eksik alan gönderildi.',
-      missing.map((field) => ({ field, message: `${field} alanı zorunludur.` })),
-    );
-  }
 }
 
 async function getTaskById(id) {
@@ -141,7 +131,6 @@ async function getTaskById(id) {
 }
 
 async function createTask(input) {
-  assertRequiredFields(input);
   const now = new Date().toISOString();
   return taskRepository.create({
     ...buildTaskFields(input),
@@ -151,7 +140,6 @@ async function createTask(input) {
 }
 
 async function updateTask(id, input) {
-  assertRequiredFields(input);
   const updated = await taskRepository.update(id, {
     ...buildTaskFields(input),
     updatedAt: new Date().toISOString(),
