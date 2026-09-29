@@ -20,15 +20,20 @@ const seed = require('./seed');
 const app = require('../src/app');
 
 const rootDir = path.resolve(__dirname, '..');
-const collection = path.join('postman', 'TaskFlow.postman_collection.json');
+const collection = 'postman/TaskFlow.postman_collection.json';
 
 function runNewman(baseUrl) {
   return new Promise((resolve) => {
-    const child = spawn(
-      'npx',
-      ['--yes', 'newman@6', 'run', collection, '--env-var', `baseUrl=${baseUrl}`, '--color', 'on'],
-      { cwd: rootDir, stdio: 'inherit', shell: true },
-    );
+    // Windows'ta npx bir .cmd dosyası olduğu için shell gerekir; shell ile
+    // argüman dizisi vermek Node'da uyarı ürettiğinden komut tek metin olarak verilir.
+    const command = `npx --yes newman@6 run ${collection} --env-var baseUrl=${baseUrl} --color on`;
+    const child = spawn(command, {
+      cwd: rootDir,
+      stdio: 'inherit',
+      shell: true,
+      // Newman'ın kendi bağımlılıklarından gelen Node uyarılarını gizler
+      env: { ...process.env, NODE_OPTIONS: '--no-deprecation' },
+    });
     child.on('close', (code) => resolve(code ?? 1));
   });
 }

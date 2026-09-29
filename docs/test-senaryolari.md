@@ -7,7 +7,7 @@ API, **Postman** ile test edilmiştir. Tüm test senaryoları `postman/TaskFlow.
 | | |
 |---|---|
 | **Araç** | Postman (manuel) · Newman (komut satırı) |
-| **Kapsam** | 30 istek · 130 doğrulama |
+| **Kapsam** | 30 istek · 131 doğrulama |
 | **Test verisi** | `npm run seed` ile yüklenen 12 örnek görev |
 | **Ortak kontroller** | Her yanıtta: `Content-Type` JSON olmalı, yanıt süresi < 1 sn |
 
@@ -58,7 +58,7 @@ npm test
 | F-04 | Birleşik filtre | `GET /tasks?status=pending&priority=high` | `200` | Her görev iki koşulu birden sağlıyor | ✅ |
 | F-05 | Görev arama | `GET /tasks/search?keyword=backend` | `200` | Sonuç boş değil; her görevin başlık veya açıklaması "backend" içeriyor | ✅ |
 | F-06 | Kullanıcı bazlı listeleme | `GET /tasks/assignee/musa` | `200` | Sonuç boş değil; tüm görevler `musa`'ya atanmış | ✅ |
-| F-07 | Sayfalama | `GET /tasks?page=1&limit=5` | `200` | En fazla 5 görev; `page`=1, `limit`=5, `totalPages` = ⌈total / 5⌉ | ✅ |
+| F-07 | Sayfalama | `GET /tasks?page=1&limit=10` | `200` | En fazla 10 görev; `page`=1, `limit`=10, `totalPages` = ⌈total / 10⌉ | ✅ |
 | F-08 | Tarihe göre artan sıralama | `GET /tasks?sort=createdAt` | `200` | `createdAt` değerleri eskiden yeniye sıralı | ✅ |
 | F-09 | Önceliğe göre azalan sıralama | `GET /tasks?sort=-priority` | `200` | Sıra high → medium → low | ✅ |
 
@@ -67,7 +67,7 @@ npm test
 | # | Senaryo | İstek | Beklenen | Doğrulananlar | Sonuç |
 |---|---|---|---|---|---|
 | V-01 | Zorunlu alanlar eksik | `POST /tasks` — yalnızca `description` | `400` | `errors` içinde `title` ve `assignee` | ✅ |
-| V-02 | Geçersiz değerler | `POST /tasks` — `title: "ab"`, `priority: "urgent"`, `status: "done"` | `400` | `errors` içinde `title`, `priority`, `status` | ✅ |
+| V-02 | Geçersiz değerler | `POST /tasks` — `title: "ab"`, `description: 12345`, `priority: "urgent"`, `assignee: "musa kolcuk"`, `status: "done"` | `400` | Yönergedeki 4 alanın (`title`, `description`, `priority`, `assignee`) ve `status`'ün hepsi `errors` içinde; her hatanın açıklayıcı mesajı var | ✅ |
 | V-03 | Geçersiz durumla PATCH | `PATCH /tasks/1/status` — `status: "done"` | `400` | `errors[0].field` = `status` | ✅ |
 | V-04 | Bozuk JSON | `POST /tasks` — kapanmayan JSON | `400` | Mesajda "JSON" | ✅ |
 | V-05 | Geçersiz id | `GET /tasks/abc` | `400` | `errors[0].field` = `id` | ✅ |
@@ -114,7 +114,7 @@ Postman koleksiyonuna ek olarak geliştirme sırasında şu durumlar da test edi
 │              iterations │        1 │        0 │
 │                requests │       30 │        0 │
 │            test-scripts │       60 │        0 │
-│              assertions │      130 │        0 │
+│              assertions │      131 │        0 │
 └─────────────────────────┴──────────┴──────────┘
 ```
 

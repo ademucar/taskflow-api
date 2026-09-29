@@ -165,9 +165,12 @@ Tüm API istekleri [`src/middlewares/logger.js`](src/middlewares/logger.js) tara
 
 ### Postman ile
 
-1. Sunucuyu başlatın: `npm start`
-2. Postman'de **Import** → `postman/TaskFlow.postman_collection.json` dosyasını seçin.
-3. Koleksiyon üzerinde **Run collection** ile tüm istekleri sırayla çalıştırın.
+1. Örnek veriyi yükleyin: `npm run seed` (filtreleme ve rapor testleri örnek veriye göre yazılmıştır)
+2. Sunucuyu başlatın: `npm start`
+3. Postman'de **Import** → `postman/TaskFlow.postman_collection.json` dosyasını seçin.
+4. Koleksiyon üzerinde **Run collection** ile tüm istekleri sırayla çalıştırın.
+
+Koleksiyon çalıştırıldıktan sonra görev listesi değişmez: CRUD klasörü oluşturduğu test görevini kendisi siler.
 
 Koleksiyon 5 klasörden oluşur: Sistem, Görev CRUD, Filtreleme / Arama / Sayfalama / Sıralama, Doğrulama ve Hata Yönetimi, Raporlar. Her istekte otomatik test scriptleri bulunur.
 
@@ -177,7 +180,7 @@ Koleksiyon 5 klasörden oluşur: Sistem, Görev CRUD, Filtreleme / Arama / Sayfa
 npm test
 ```
 
-Bu komut, gerçek veriye dokunmadan geçici bir veri dosyasıyla sunucuyu başlatır ve Postman koleksiyonunu [Newman](https://github.com/postmanlabs/newman) ile komut satırından çalıştırır (30 istek, 130 doğrulama).
+Bu komut, gerçek veriye dokunmadan geçici bir veri dosyasıyla sunucuyu başlatır ve Postman koleksiyonunu [Newman](https://github.com/postmanlabs/newman) ile komut satırından çalıştırır (30 istek, 131 doğrulama).
 
 Test senaryolarının yazılı açıklaması: **[Test Dokümantasyonu](docs/test-senaryolari.md)**
 

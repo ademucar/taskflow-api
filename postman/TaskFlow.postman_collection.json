@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "TaskFlow API",
-    "description": "TaskFlow — Görev ve Proje Yönetim Sistemi REST API test koleksiyonu.\n\nKullanım: Sunucuyu başlatın (npm start), koleksiyonu içe aktarın ve \"Run collection\" ile tüm testleri sırayla çalıştırın.\nbaseUrl değişkeni varsayılan olarak http://localhost:3000 adresini gösterir.\n\nNot: CRUD klasörü sırayla çalışmalıdır; \"Görev Ekle\" isteği oluşturulan görevin id'sini taskId değişkenine kaydeder.",
+    "description": "TaskFlow — Görev ve Proje Yönetim Sistemi REST API test koleksiyonu.\n\nKullanım: Örnek veriyi yükleyin (npm run seed), sunucuyu başlatın (npm start), koleksiyonu içe aktarın ve \"Run collection\" ile tüm testleri sırayla çalıştırın.\nbaseUrl değişkeni varsayılan olarak http://localhost:3000 adresini gösterir.\n\nNot: CRUD klasörü sırayla çalışmalıdır; \"Görev Ekle\" isteği oluşturulan görevin id'sini taskId değişkenine kaydeder.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "event": [
@@ -493,11 +493,11 @@
                 "exec": [
                   "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
                   "const body = pm.response.json();",
-                  "pm.test(\"En fazla 5 görev döndü\", () => pm.expect(body.data.length).to.be.at.most(5));",
+                  "pm.test(\"En fazla 10 görev döndü\", () => pm.expect(body.data.length).to.be.at.most(10));",
                   "pm.test(\"Sayfalama bilgisi doğru\", () => {",
                   "    pm.expect(body.pagination.page).to.eql(1);",
-                  "    pm.expect(body.pagination.limit).to.eql(5);",
-                  "    pm.expect(body.pagination.totalPages).to.eql(Math.ceil(body.pagination.total / 5));",
+                  "    pm.expect(body.pagination.limit).to.eql(10);",
+                  "    pm.expect(body.pagination.totalPages).to.eql(Math.ceil(body.pagination.total / 10));",
                   "});"
                 ]
               }
@@ -506,7 +506,7 @@
           "request": {
             "method": "GET",
             "header": [],
-            "url": "{{baseUrl}}/tasks?page=1&limit=5"
+            "url": "{{baseUrl}}/tasks?page=1&limit=10"
           }
         },
         {
@@ -608,9 +608,12 @@
                 "type": "text/javascript",
                 "exec": [
                   "pm.test(\"Status 400 Bad Request\", () => pm.response.to.have.status(400));",
-                  "pm.test(\"title, priority ve status hataları listelendi\", () => {",
-                  "    const fields = pm.response.json().errors.map((e) => e.field);",
-                  "    pm.expect(fields).to.include.members([\"title\", \"priority\", \"status\"]);",
+                  "const { errors } = pm.response.json();",
+                  "pm.test(\"title, description, priority, assignee ve status hataları listelendi\", () => {",
+                  "    pm.expect(errors.map((e) => e.field)).to.have.members([\"title\", \"description\", \"priority\", \"assignee\", \"status\"]);",
+                  "});",
+                  "pm.test(\"Her hata açıklayıcı bir mesaj içeriyor\", () => {",
+                  "    errors.forEach((e) => pm.expect(e.message).to.be.a(\"string\").and.have.length.above(10));",
                   "});"
                 ]
               }
@@ -627,7 +630,7 @@
             "url": "{{baseUrl}}/tasks",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"title\": \"ab\",\n  \"description\": \"Geçersiz öncelik ve durum\",\n  \"priority\": \"urgent\",\n  \"status\": \"done\",\n  \"assignee\": \"musa\"\n}",
+              "raw": "{\n  \"title\": \"ab\",\n  \"description\": 12345,\n  \"priority\": \"urgent\",\n  \"status\": \"done\",\n  \"assignee\": \"musa kolcuk\"\n}",
               "options": {
                 "raw": {
                   "language": "json"

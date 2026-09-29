@@ -64,7 +64,7 @@ Tüm yanıtlar tutarlı bir formatta döner (`success`, `data`, `message`, `erro
 
 ## 5. Test
 
-Tüm endpoint'ler Postman ile test edilmiştir. Proje ile birlikte teslim edilen Postman koleksiyonu 30 istek ve 130 otomatik doğrulama içerir; CRUD işlemlerini, filtreleme ve raporları, hatalı istekleri (eksik alan, geçersiz değer, bozuk JSON, olmayan kayıt) kapsar. Koleksiyon `npm test` komutuyla Newman üzerinden komut satırından da çalıştırılabilir. Ekran görüntüleri `docs/screenshots` klasöründedir.
+Tüm endpoint'ler Postman ile test edilmiştir. Proje ile birlikte teslim edilen Postman koleksiyonu 30 istek ve 131 otomatik doğrulama içerir; CRUD işlemlerini, filtreleme ve raporları, hatalı istekleri (eksik alan, geçersiz değer, bozuk JSON, olmayan kayıt) kapsar. Koleksiyon `npm test` komutuyla Newman üzerinden komut satırından da çalıştırılabilir. Ekran görüntüleri `docs/screenshots` klasöründedir.
 
 ## 6. Yönerge Karşılama Tablosu
 
