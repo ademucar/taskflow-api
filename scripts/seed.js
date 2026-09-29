@@ -1,6 +1,7 @@
 /**
  * data/tasks.json dosyasını örnek görevlerle yeniden oluşturur.
  * Kullanım: npm run seed
+ * Test betiği (scripts/run-tests.js) de aynı fonksiyonu geçici bir dosya için kullanır.
  */
 const fs = require('fs/promises');
 const path = require('path');
@@ -37,10 +38,19 @@ async function seed() {
     JSON.stringify({ lastId: tasks.length, tasks }, null, 2) + '\n',
     'utf8',
   );
-  console.log(`${tasks.length} örnek görev yüklendi → ${path.relative(process.cwd(), config.dataFile)}`);
+  return tasks.length;
 }
 
-seed().catch((err) => {
-  console.error('Seed işlemi başarısız:', err);
-  process.exit(1);
-});
+module.exports = seed;
+
+// Doğrudan çalıştırıldığında (npm run seed)
+if (require.main === module) {
+  seed()
+    .then((count) => {
+      console.log(`${count} örnek görev yüklendi → ${path.relative(process.cwd(), config.dataFile)}`);
+    })
+    .catch((err) => {
+      console.error('Seed işlemi başarısız:', err);
+      process.exit(1);
+    });
+}

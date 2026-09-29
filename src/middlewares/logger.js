@@ -42,6 +42,7 @@ function logger(req, res, next) {
 
     logStream.write(`[${timestamp}] ${method} ${originalUrl} ${status} - ${durationMs} ms\n`);
 
+    if (!config.logToConsole) return;
     console.log(
       `${paint(`[${timestamp}]`, 'gray')} ${paint(method.padEnd(6), 'cyan')} ${originalUrl} ` +
         `${paint(String(status), statusColor(status))} ${paint(`- ${durationMs} ms`, 'gray')}`,
