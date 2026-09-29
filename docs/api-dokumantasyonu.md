@@ -12,6 +12,8 @@
   - [GET /tasks — Görevleri listele](#get-tasks--görevleri-listele)
   - [GET /tasks/:id — Görev detayı](#get-tasksid--görev-detayı)
   - [PUT /tasks/:id — Görev güncelle](#put-tasksid--görev-güncelle)
+  - [PATCH /tasks/:id/status — Durum değiştir](#patch-tasksidstatus--durum-değiştir)
+  - [PATCH /tasks/:id/assign — Çalışana ata](#patch-tasksidassign--çalışana-ata)
   - [DELETE /tasks/:id — Görev sil](#delete-tasksid--görev-sil)
   - [GET /tasks/search — Görev ara](#get-taskssearch--görev-ara)
   - [GET /tasks/assignee/:assignee — Kişinin görevleri](#get-tasksassigneeassignee--kişinin-görevleri)
@@ -265,6 +267,82 @@ Content-Type: application/json
 ```
 
 **Olası hatalar:** `400` (doğrulama hatası, geçersiz id), `404` (görev yok)
+
+---
+
+### `PATCH /tasks/:id/status` — Durum değiştir
+
+Görevin yalnızca durumunu değiştirir; diğer alanlar olduğu gibi kalır. Görev takibi için `PUT` ile tüm görevi göndermeye gerek bırakmaz.
+
+| Alan | Zorunlu | Kural |
+|---|---|---|
+| `status` | ✔ | `pending`, `in-progress`, `completed` |
+
+```http
+PATCH /tasks/7/status
+Content-Type: application/json
+
+{ "status": "in-progress" }
+```
+
+**Yanıt — `200 OK`:**
+
+```json
+{
+  "success": true,
+  "message": "Görev durumu \"in-progress\" olarak güncellendi.",
+  "data": {
+    "id": 7,
+    "title": "Postman koleksiyonunu oluştur",
+    "description": "Tüm endpoint'ler için örnek istekler ve testler.",
+    "status": "in-progress",
+    "priority": "medium",
+    "assignee": "mehmet",
+    "createdAt": "2026-09-27T18:00:00.000Z",
+    "updatedAt": "2026-10-12T10:20:15.402Z"
+  }
+}
+```
+
+**Olası hatalar:** `400` (`status` eksik / geçersiz, gövdede başka alan var, geçersiz id), `404` (görev yok)
+
+---
+
+### `PATCH /tasks/:id/assign` — Çalışana ata
+
+Görevi başka bir çalışana atar; diğer alanlar olduğu gibi kalır.
+
+| Alan | Zorunlu | Kural |
+|---|---|---|
+| `assignee` | ✔ | 2–50 karakter; harf, rakam, `.` `_` `-` |
+
+```http
+PATCH /tasks/7/assign
+Content-Type: application/json
+
+{ "assignee": "zeynep" }
+```
+
+**Yanıt — `200 OK`:**
+
+```json
+{
+  "success": true,
+  "message": "Görev \"zeynep\" kullanıcısına atandı.",
+  "data": {
+    "id": 7,
+    "title": "Postman koleksiyonunu oluştur",
+    "description": "Tüm endpoint'ler için örnek istekler ve testler.",
+    "status": "in-progress",
+    "priority": "medium",
+    "assignee": "zeynep",
+    "createdAt": "2026-09-27T18:00:00.000Z",
+    "updatedAt": "2026-10-12T10:21:02.118Z"
+  }
+}
+```
+
+**Olası hatalar:** `400` (`assignee` eksik / geçersiz, geçersiz id), `404` (görev yok)
 
 ---
 

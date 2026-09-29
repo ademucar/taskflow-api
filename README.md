@@ -15,6 +15,7 @@ Bir yazılım ekibinin görevlerini oluşturmasını, çalışanlara atamasını
 | **Zorunlu** | Görev ekleme, listeleme, detay, güncelleme, silme (CRUD) |
 | **Zorunlu** | Logger middleware — her isteğin method, endpoint ve zaman damgası konsola ve dosyaya yazılır |
 | **Zorunlu** | Postman test koleksiyonu |
+| Ek | Görev takibi — durum değiştirme ve çalışana atama için ayrı `PATCH` uçları |
 | Pratik 1 | Duruma / önceliğe göre filtreleme, arama, kullanıcı bazlı listeleme, sayfalama, sıralama |
 | Pratik 2 | Validation middleware — geçersiz veride açıklayıcı mesajla `400 Bad Request` |
 | Pratik 3 | Raporlama servisleri — tamamlanan, bekleyen görev sayıları ve genel özet |
@@ -88,6 +89,8 @@ Sunucu varsayılan olarak **http://localhost:3000** adresinde çalışır. Taray
 | `GET` | `/tasks` | Görevleri listele (filtre / sıralama / sayfalama) |
 | `GET` | `/tasks/:id` | Görev detayı |
 | `PUT` | `/tasks/:id` | Görev güncelle |
+| `PATCH` | `/tasks/:id/status` | Görev durumunu değiştir |
+| `PATCH` | `/tasks/:id/assign` | Görevi çalışana ata |
 | `DELETE` | `/tasks/:id` | Görev sil |
 | `GET` | `/tasks/search?keyword=` | Görev ara |
 | `GET` | `/tasks/assignee/:assignee` | Kişiye atanan görevler |
@@ -149,7 +152,7 @@ Koleksiyon 5 klasörden oluşur: Sistem, Görev CRUD, Filtreleme / Arama / Sayfa
 npm test
 ```
 
-Bu komut, gerçek veriye dokunmadan geçici bir veri dosyasıyla sunucuyu başlatır ve Postman koleksiyonunu [Newman](https://github.com/postmanlabs/newman) ile komut satırından çalıştırır (26 istek, 112 doğrulama).
+Bu komut, gerçek veriye dokunmadan geçici bir veri dosyasıyla sunucuyu başlatır ve Postman koleksiyonunu [Newman](https://github.com/postmanlabs/newman) ile komut satırından çalıştırır (29 istek, 126 doğrulama).
 
 Test senaryolarının yazılı açıklaması: **[Test Dokümantasyonu](docs/test-senaryolari.md)**
 

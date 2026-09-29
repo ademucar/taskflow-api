@@ -7,7 +7,7 @@ API, **Postman** ile test edilmiştir. Tüm test senaryoları `postman/TaskFlow.
 | | |
 |---|---|
 | **Araç** | Postman (manuel) · Newman (komut satırı) |
-| **Kapsam** | 26 istek · 112 doğrulama |
+| **Kapsam** | 29 istek · 126 doğrulama |
 | **Test verisi** | `npm run seed` ile yüklenen 12 örnek görev |
 | **Ortak kontroller** | Her yanıtta: `Content-Type` JSON olmalı, yanıt süresi < 1 sn |
 
@@ -43,8 +43,10 @@ npm test
 | C-02 | Görev listeleme | `GET /tasks` | `200` | `data` dizi; `count` = dizi uzunluğu; C-01'de eklenen görev listede | ✅ |
 | C-03 | Görev detayı | `GET /tasks/{{taskId}}` | `200` | Dönen görevin `id` ve `title` değeri doğru | ✅ |
 | C-04 | Görev güncelleme | `PUT /tasks/{{taskId}}` | `200` | `title`, `status` (`completed`), `priority` güncellendi; `updatedAt` ≥ `createdAt` | ✅ |
-| C-05 | Görev silme | `DELETE /tasks/{{taskId}}` | `200` | Silinen görev yanıtta döndü | ✅ |
-| C-06 | Silinen görevi getirme | `GET /tasks/{{taskId}}` | `404` | `success: false`, mesajda "bulunamadı" | ✅ |
+| C-05 | Durum değiştirme *(ek)* | `PATCH /tasks/{{taskId}}/status` | `200` | Durum `in-progress` oldu; `title` ve `assignee` korundu | ✅ |
+| C-06 | Başka çalışana atama *(ek)* | `PATCH /tasks/{{taskId}}/assign` | `200` | `assignee` = `zeynep`; durum değişmedi | ✅ |
+| C-07 | Görev silme | `DELETE /tasks/{{taskId}}` | `200` | Silinen görev yanıtta döndü | ✅ |
+| C-08 | Silinen görevi getirme | `GET /tasks/{{taskId}}` | `404` | `success: false`, mesajda "bulunamadı" | ✅ |
 
 ### 2.2 Filtreleme, Arama, Sayfalama, Sıralama (Pratik 1)
 
@@ -65,12 +67,13 @@ npm test
 |---|---|---|---|---|---|
 | V-01 | Zorunlu alanlar eksik | `POST /tasks` — yalnızca `description` | `400` | `errors` içinde `title` ve `assignee` | ✅ |
 | V-02 | Geçersiz değerler | `POST /tasks` — `title: "ab"`, `priority: "urgent"`, `status: "done"` | `400` | `errors` içinde `title`, `priority`, `status` | ✅ |
-| V-03 | Bozuk JSON | `POST /tasks` — kapanmayan JSON | `400` | Mesajda "JSON" | ✅ |
-| V-04 | Geçersiz id | `GET /tasks/abc` | `400` | `errors[0].field` = `id` | ✅ |
-| V-05 | Olmayan görev | `GET /tasks/99999` | `404` | Mesaj id'yi içeriyor | ✅ |
-| V-06 | Geçersiz filtre değeri | `GET /tasks?status=done` | `400` | `errors[0].field` = `status` | ✅ |
-| V-07 | Aramada keyword eksik | `GET /tasks/search` | `400` | `errors[0].field` = `keyword` | ✅ |
-| V-08 | Olmayan endpoint | `GET /olmayan-endpoint` | `404` | Mesajda "Endpoint bulunamadı" | ✅ |
+| V-03 | Geçersiz durumla PATCH | `PATCH /tasks/1/status` — `status: "done"` | `400` | `errors[0].field` = `status` | ✅ |
+| V-04 | Bozuk JSON | `POST /tasks` — kapanmayan JSON | `400` | Mesajda "JSON" | ✅ |
+| V-05 | Geçersiz id | `GET /tasks/abc` | `400` | `errors[0].field` = `id` | ✅ |
+| V-06 | Olmayan görev | `GET /tasks/99999` | `404` | Mesaj id'yi içeriyor | ✅ |
+| V-07 | Geçersiz filtre değeri | `GET /tasks?status=done` | `400` | `errors[0].field` = `status` | ✅ |
+| V-08 | Aramada keyword eksik | `GET /tasks/search` | `400` | `errors[0].field` = `keyword` | ✅ |
+| V-09 | Olmayan endpoint | `GET /olmayan-endpoint` | `404` | Mesajda "Endpoint bulunamadı" | ✅ |
 
 ### 2.4 Raporlar (Pratik 3)
 
@@ -107,9 +110,9 @@ Postman koleksiyonuna ek olarak geliştirme sırasında şu durumlar da test edi
 │                         │ executed │   failed │
 ├─────────────────────────┼──────────┼──────────┤
 │              iterations │        1 │        0 │
-│                requests │       26 │        0 │
-│            test-scripts │       52 │        0 │
-│              assertions │      112 │        0 │
+│                requests │       29 │        0 │
+│            test-scripts │       58 │        0 │
+│              assertions │      126 │        0 │
 └─────────────────────────┴──────────┴──────────┘
 ```
 

@@ -3,6 +3,8 @@ const taskController = require('../controllers/taskController');
 const validate = require('../middlewares/validate');
 const {
   taskBodySchema,
+  statusBodySchema,
+  assignBodySchema,
   taskIdParamSchema,
   assigneeParamSchema,
   taskQuerySchema,
@@ -32,5 +34,20 @@ router
   .get(taskController.getTaskById)
   .put(validate(taskBodySchema), taskController.updateTask)
   .delete(taskController.deleteTask);
+
+// Tek alanlı güncellemeler: durum takibi ve çalışana atama
+router.patch(
+  '/:id/status',
+  validate(taskIdParamSchema, 'params'),
+  validate(statusBodySchema),
+  taskController.updateTaskStatus,
+);
+
+router.patch(
+  '/:id/assign',
+  validate(taskIdParamSchema, 'params'),
+  validate(assignBodySchema),
+  taskController.assignTask,
+);
 
 module.exports = router;

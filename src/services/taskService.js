@@ -124,9 +124,21 @@ function buildTaskFields(input) {
   };
 }
 
+const taskNotFound = (id) => AppError.notFound(`${id} id'li görev bulunamadı.`);
+
+// Verilen alanları günceller ve updatedAt'i yeniler.
+async function applyUpdate(id, fields) {
+  const updated = await taskRepository.update(id, {
+    ...fields,
+    updatedAt: new Date().toISOString(),
+  });
+  if (!updated) throw taskNotFound(id);
+  return updated;
+}
+
 async function getTaskById(id) {
   const task = await taskRepository.findById(id);
-  if (!task) throw AppError.notFound(`${id} id'li görev bulunamadı.`);
+  if (!task) throw taskNotFound(id);
   return task;
 }
 
@@ -139,18 +151,24 @@ async function createTask(input) {
   });
 }
 
+// PUT: görevin tüm düzenlenebilir alanlarını değiştirir
 async function updateTask(id, input) {
-  const updated = await taskRepository.update(id, {
-    ...buildTaskFields(input),
-    updatedAt: new Date().toISOString(),
-  });
-  if (!updated) throw AppError.notFound(`${id} id'li görev bulunamadı.`);
-  return updated;
+  return applyUpdate(id, buildTaskFields(input));
+}
+
+// PATCH /tasks/:id/status: yalnızca durumu değiştirir
+async function updateTaskStatus(id, status) {
+  return applyUpdate(id, { status: status.trim() });
+}
+
+// PATCH /tasks/:id/assign: görevi başka bir çalışana atar
+async function assignTask(id, assignee) {
+  return applyUpdate(id, { assignee: assignee.trim() });
 }
 
 async function deleteTask(id) {
   const deleted = await taskRepository.remove(id);
-  if (!deleted) throw AppError.notFound(`${id} id'li görev bulunamadı.`);
+  if (!deleted) throw taskNotFound(id);
   return deleted;
 }
 
@@ -159,5 +177,7 @@ module.exports = {
   getTaskById,
   createTask,
   updateTask,
+  updateTaskStatus,
+  assignTask,
   deleteTask,
 };

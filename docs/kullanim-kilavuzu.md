@@ -68,26 +68,30 @@ console.log(task.id); // → 13
 
 Tipik bir görev akışı: **pending → in-progress → completed**
 
+Durum değiştirmek ve görevi başka birine atamak için tek alanlı `PATCH` uçları kullanılır:
+
 ```js
 // Çalışmaya başla
-await api('PUT', `/tasks/${task.id}`, { ...editable(task), status: 'in-progress' });
+await api('PATCH', `/tasks/${task.id}/status`, { status: 'in-progress' });
+
+// Görevi başka bir çalışana devret
+await api('PATCH', `/tasks/${task.id}/assign`, { assignee: 'mehmet' });
 
 // Tamamla
-await api('PUT', `/tasks/${task.id}`, { ...editable(task), status: 'completed' });
+await api('PATCH', `/tasks/${task.id}/status`, { status: 'completed' });
+```
 
-// PUT tam güncelleme olduğu için yalnızca düzenlenebilir alanlar gönderilir
+Başlık, açıklama gibi birden fazla alanı değiştirmek için `PUT` kullanılır. `PUT` tam güncelleme olduğu için tüm düzenlenebilir alanlar gönderilmelidir:
+
+```js
+await api('PUT', `/tasks/${task.id}`, { ...editable(task), title: 'Ana sayfa tasarımı (v2)' });
+
 function editable({ title, description, status, priority, assignee }) {
   return { title, description, status, priority, assignee };
 }
 ```
 
 > `PUT` isteğinde `id`, `createdAt`, `updatedAt` gibi sistem alanları gönderilirse istek `400` ile reddedilir. Bu yüzden yukarıdaki `editable` fonksiyonu kullanılır.
-
-Görevi başka birine atamak da aynı şekilde yapılır:
-
-```js
-await api('PUT', `/tasks/${task.id}`, { ...editable(task), assignee: 'mehmet' });
-```
 
 ---
 
@@ -198,6 +202,8 @@ Silinen görevin id'si bir daha kullanılmaz; yeni görevler her zaman yeni bir 
 | Listele | `GET /tasks` |
 | Detay | `GET /tasks/:id` |
 | Güncelle | `PUT /tasks/:id` |
+| Durum değiştir | `PATCH /tasks/:id/status` |
+| Ata | `PATCH /tasks/:id/assign` |
 | Sil | `DELETE /tasks/:id` |
 | Filtrele | `GET /tasks?status=&priority=` |
 | Sırala | `GET /tasks?sort=-createdAt` |

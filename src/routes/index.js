@@ -19,6 +19,8 @@ router.get('/', (req, res) => {
           detail: 'GET /tasks/:id',
           create: 'POST /tasks',
           update: 'PUT /tasks/:id',
+          updateStatus: 'PATCH /tasks/:id/status',
+          assign: 'PATCH /tasks/:id/assign',
           delete: 'DELETE /tasks/:id',
           search: 'GET /tasks/search?keyword=',
           byAssignee: 'GET /tasks/assignee/:assignee',

@@ -210,6 +210,81 @@
           }
         },
         {
+          "name": "Görev Durumunu Güncelle (Ek)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+                  "const { data: task } = pm.response.json();",
+                  "pm.test(\"Durum in-progress oldu\", () => pm.expect(task.status).to.eql(\"in-progress\"));",
+                  "pm.test(\"Diğer alanlar korundu\", () => {",
+                  "    pm.expect(task.title).to.eql(\"Postman ile test görevi (güncellendi)\");",
+                  "    pm.expect(task.assignee).to.eql(\"musa\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/tasks/{{taskId}}/status",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"in-progress\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Görevi Başka Çalışana Ata (Ek)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+                  "const { data: task } = pm.response.json();",
+                  "pm.test(\"Görev zeynep'e atandı\", () => pm.expect(task.assignee).to.eql(\"zeynep\"));",
+                  "pm.test(\"Durum değişmedi\", () => pm.expect(task.status).to.eql(\"in-progress\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/tasks/{{taskId}}/assign",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"assignee\": \"zeynep\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
           "name": "Görev Sil",
           "event": [
             {
@@ -562,6 +637,40 @@
             "body": {
               "mode": "raw",
               "raw": "{ \"title\": \"Kapanmayan JSON\", ",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Geçersiz Durumla Güncelle (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400 Bad Request\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"status hatası döndü\", () => pm.expect(pm.response.json().errors[0].field).to.eql(\"status\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/tasks/1/status",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"done\"\n}",
               "options": {
                 "raw": {
                   "language": "json"

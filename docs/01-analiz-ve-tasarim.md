@@ -165,6 +165,13 @@ Sistemin tek varlığı **Görev (Task)**'tir. Görevin atandığı çalışan, 
 | `PUT` | `/tasks/:id` | Görevi günceller | 200 |
 | `DELETE` | `/tasks/:id` | Görevi siler | 200 |
 
+**Ek — Görev takibi:** Senaryodaki "çalışanlara atama" ve "durum takibi" ihtiyaçları için, tüm görevi göndermeden tek alan değiştiren iki uç:
+
+| Method | Endpoint | Gövde | Açıklama |
+|---|---|---|---|
+| `PATCH` | `/tasks/:id/status` | `{ "status": "in-progress" }` | Görevin durumunu değiştirir |
+| `PATCH` | `/tasks/:id/assign` | `{ "assignee": "zeynep" }` | Görevi başka bir çalışana atar |
+
 ### 5.2 Gelişmiş API Özellikleri — Pratik 1
 
 | Özellik | Örnek İstek |

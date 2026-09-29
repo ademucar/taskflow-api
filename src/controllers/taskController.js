@@ -44,6 +44,18 @@ async function updateTask(req, res) {
   res.status(200).json({ success: true, message: 'Görev güncellendi.', data: task });
 }
 
+// PATCH /tasks/:id/status
+async function updateTaskStatus(req, res) {
+  const task = await taskService.updateTaskStatus(Number(req.params.id), req.body.status);
+  res.status(200).json({ success: true, message: `Görev durumu "${task.status}" olarak güncellendi.`, data: task });
+}
+
+// PATCH /tasks/:id/assign
+async function assignTask(req, res) {
+  const task = await taskService.assignTask(Number(req.params.id), req.body.assignee);
+  res.status(200).json({ success: true, message: `Görev "${task.assignee}" kullanıcısına atandı.`, data: task });
+}
+
 // DELETE /tasks/:id
 async function deleteTask(req, res) {
   const task = await taskService.deleteTask(Number(req.params.id));
@@ -57,5 +69,7 @@ module.exports = {
   getTaskById,
   createTask,
   updateTask,
+  updateTaskStatus,
+  assignTask,
   deleteTask,
 };
