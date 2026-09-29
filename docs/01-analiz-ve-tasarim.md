@@ -88,7 +88,7 @@ Sistemin tek varlığı **Görev (Task)**'tir. Görevin atandığı çalışan, 
 
 ```
 İstek ─► Middleware'ler ─► Route ─► Controller ─► Service ─► Repository ─► data/tasks.json
-         (json, logger,                                         (fs)
+         (logger, json,                                         (fs)
           validation)
                           Hata olursa ─► errorHandler ─► Tutarlı JSON hata yanıtı
 ```
@@ -102,8 +102,8 @@ Sistemin tek varlığı **Görev (Task)**'tir. Görevin atandığı çalışan, 
 
 ### 4.2 Middleware Zinciri
 
-1. `express.json()` — İstek gövdesini JSON olarak ayrıştırır
-2. **`logger`** — Her isteğin method, endpoint ve zaman damgasını (ayrıca status kodu ve yanıt süresini) konsola ve `logs/requests.log` dosyasına yazar
+1. **`logger`** — Her isteğin method, endpoint ve zaman damgasını (ayrıca status kodu ve yanıt süresini) konsola ve `logs/requests.log` dosyasına yazar. En başta olduğu için hatalı istekler de loglanır.
+2. `express.json()` — İstek gövdesini JSON olarak ayrıştırır
 3. **`validate`** — Görev oluşturma / güncelleme isteklerinde alanları doğrular, hatalıysa **400** döner
 4. Route'lar
 5. `notFound` — Tanımsız endpoint için **404**
