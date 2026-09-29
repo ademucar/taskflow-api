@@ -221,7 +221,7 @@ backend-proje/
 ├── data/tasks.json         # Kalıcı veri
 ├── logs/                   # Logger çıktıları
 ├── scripts/seed.js         # Örnek veriyi yükler
-├── postman/                # Postman koleksiyonu ve environment
+├── postman/                # Postman test koleksiyonu
 ├── docs/                   # Tanıtım, tasarım, API, test dokümanları ve ekran görüntüleri
 ├── package.json
 └── README.md
