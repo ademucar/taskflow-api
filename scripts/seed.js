@@ -23,8 +23,11 @@ const sampleTasks = [
 ];
 
 async function seed() {
-  const start = Date.parse('2026-10-10T09:00:00.000Z');
+  // Görevler, seed çalıştırıldığı andan geriye doğru 7'şer saat arayla oluşturulmuş gibi
+  // tarihlenir; böylece sonradan eklenen görevler her zaman en yeni olur.
   const hour = 60 * 60 * 1000;
+  const lastHour = Math.floor(Date.now() / hour) * hour;
+  const start = lastHour - (sampleTasks.length * 7 + 5) * hour;
 
   const tasks = sampleTasks.map(([title, description, status, priority, assignee], index) => {
     const createdAt = new Date(start + index * 7 * hour).toISOString();
