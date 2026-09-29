@@ -4,6 +4,10 @@ const AppError = require('../utils/AppError');
 // middleware'i hata yakalayıcı olarak tanır.
 // eslint-disable-next-line no-unused-vars
 function errorHandler(err, req, res, next) {
+  // İstemci gövdeyi göndermeden bağlantıyı kopardı: yanıtı alacak kimse yok.
+  // Logger bu isteği "aborted" olarak kaydeder.
+  if (err.type === 'request.aborted') return;
+
   // express.json() bozuk bir gövdeyle karşılaştığında
   if (err.type === 'entity.parse.failed') {
     return res.status(400).json({

@@ -25,7 +25,7 @@ function paint(text, color) {
 }
 
 function statusColor(status) {
-  if (status >= 500) return 'red';
+  if (status === 'aborted' || status >= 500) return 'red';
   if (status >= 400) return 'yellow';
   if (status >= 300) return 'cyan';
   return 'green';
@@ -36,9 +36,11 @@ function logger(req, res, next) {
   const start = process.hrtime.bigint();
   const { method, originalUrl } = req;
 
-  res.on('finish', () => {
+  // 'close' her istekte tetiklenir; yanıt gönderilmeden bağlantı koparsa
+  // (istemci isteği iptal ederse) istek yine loglanır ve "aborted" olarak işaretlenir.
+  res.once('close', () => {
     const durationMs = (Number(process.hrtime.bigint() - start) / 1e6).toFixed(2);
-    const status = res.statusCode;
+    const status = res.writableFinished ? res.statusCode : 'aborted';
 
     logStream.write(`[${timestamp}] ${method} ${originalUrl} ${status} - ${durationMs} ms\n`);
 
