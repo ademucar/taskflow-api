@@ -197,9 +197,9 @@ Ayrıca `status` değerinin geçerliliği, tanımsız alan gönderilmesi ve sorg
 
 | Method | Endpoint | Açıklama |
 |---|---|---|
-| `GET` | `/reports/completed` | Tamamlanan görev sayısı |
-| `GET` | `/reports/pending` | Bekleyen (tamamlanmamış) görev sayısı |
-| `GET` | `/reports/summary` | Genel sistem özeti: toplam görev, duruma / önceliğe / kişiye göre dağılım, tamamlanma oranı |
+| `GET` | `/reports/completed` | Tamamlanan görev sayısı, toplam içindeki yüzdesi |
+| `GET` | `/reports/pending` | Bekleyen (tamamlanmamış) görev sayısı, `pending` / `in-progress` kırılımı, yüksek öncelikli bekleyen sayısı |
+| `GET` | `/reports/summary` | Genel sistem özeti: toplam / tamamlanan / bekleyen görev, tamamlanma oranı, duruma ve önceliğe göre dağılım, kişi bazında görev ve tamamlanma oranı |
 
 ---
 
