@@ -1,0 +1,125 @@
+{
+  "lastId": 12,
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Proje klasör yapısını oluştur",
+      "description": "Katmanlı mimariye uygun src klasörü hazırlanacak.",
+      "status": "completed",
+      "priority": "high",
+      "assignee": "musa",
+      "createdAt": "2026-10-10T09:00:00.000Z",
+      "updatedAt": "2026-10-10T14:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "title": "Express sunucusunu kur",
+      "description": "Express 5 kurulumu ve temel middleware zinciri.",
+      "status": "completed",
+      "priority": "high",
+      "assignee": "musa",
+      "createdAt": "2026-10-10T16:00:00.000Z",
+      "updatedAt": "2026-10-10T21:00:00.000Z"
+    },
+    {
+      "id": 3,
+      "title": "Görev CRUD endpoint'lerini yaz",
+      "description": "Backend tarafında ekleme, listeleme, detay, güncelleme ve silme işlemleri.",
+      "status": "in-progress",
+      "priority": "high",
+      "assignee": "musa",
+      "createdAt": "2026-10-10T23:00:00.000Z",
+      "updatedAt": "2026-10-11T04:00:00.000Z"
+    },
+    {
+      "id": 4,
+      "title": "Logger middleware geliştir",
+      "description": "Tüm isteklerin method, endpoint ve zaman bilgisi loglanacak.",
+      "status": "completed",
+      "priority": "medium",
+      "assignee": "ayse",
+      "createdAt": "2026-10-11T06:00:00.000Z",
+      "updatedAt": "2026-10-11T11:00:00.000Z"
+    },
+    {
+      "id": 5,
+      "title": "Validation middleware yaz",
+      "description": "title, description, priority ve assignee alanları doğrulanacak.",
+      "status": "in-progress",
+      "priority": "medium",
+      "assignee": "ayse",
+      "createdAt": "2026-10-11T13:00:00.000Z",
+      "updatedAt": "2026-10-11T18:00:00.000Z"
+    },
+    {
+      "id": 6,
+      "title": "Veri modeli dokümanını hazırla",
+      "description": "Görev alanları ve kuralları dokümante edilecek.",
+      "status": "completed",
+      "priority": "low",
+      "assignee": "zeynep",
+      "createdAt": "2026-10-11T20:00:00.000Z",
+      "updatedAt": "2026-10-12T01:00:00.000Z"
+    },
+    {
+      "id": 7,
+      "title": "Postman koleksiyonunu oluştur",
+      "description": "Tüm endpoint'ler için örnek istekler ve testler.",
+      "status": "pending",
+      "priority": "medium",
+      "assignee": "mehmet",
+      "createdAt": "2026-10-12T03:00:00.000Z",
+      "updatedAt": "2026-10-12T03:00:00.000Z"
+    },
+    {
+      "id": 8,
+      "title": "Raporlama servislerini ekle",
+      "description": "Tamamlanan, bekleyen görev sayıları ve genel özet.",
+      "status": "pending",
+      "priority": "medium",
+      "assignee": "mehmet",
+      "createdAt": "2026-10-12T10:00:00.000Z",
+      "updatedAt": "2026-10-12T10:00:00.000Z"
+    },
+    {
+      "id": 9,
+      "title": "Arama özelliğini geliştir",
+      "description": "Başlık ve açıklamada anahtar kelimeyle backend araması.",
+      "status": "pending",
+      "priority": "low",
+      "assignee": "zeynep",
+      "createdAt": "2026-10-12T17:00:00.000Z",
+      "updatedAt": "2026-10-12T17:00:00.000Z"
+    },
+    {
+      "id": 10,
+      "title": "README kurulum notunu yaz",
+      "description": "Projenin nasıl kurulup çalıştırılacağı adım adım anlatılacak.",
+      "status": "pending",
+      "priority": "low",
+      "assignee": "ayse",
+      "createdAt": "2026-10-13T00:00:00.000Z",
+      "updatedAt": "2026-10-13T00:00:00.000Z"
+    },
+    {
+      "id": 11,
+      "title": "Sayfalama yapısını test et",
+      "description": "page ve limit parametreleri farklı değerlerle denenecek.",
+      "status": "pending",
+      "priority": "high",
+      "assignee": "can",
+      "createdAt": "2026-10-13T07:00:00.000Z",
+      "updatedAt": "2026-10-13T07:00:00.000Z"
+    },
+    {
+      "id": 12,
+      "title": "Hata mesajlarını Türkçeleştir",
+      "description": "Tüm hata yanıtları anlaşılır Türkçe mesajlar içerecek.",
+      "status": "in-progress",
+      "priority": "low",
+      "assignee": "can",
+      "createdAt": "2026-10-13T14:00:00.000Z",
+      "updatedAt": "2026-10-13T19:00:00.000Z"
+    }
+  ]
+}
