@@ -21,8 +21,9 @@ const AppError = require('../utils/AppError');
 
 const SOURCE_LABELS = { body: 'alanı', query: 'parametresi', params: 'parametresi' };
 
+// undefined, null ve boş metin "gönderilmemiş" sayılır; zorunlu değilse varsayılan kullanılır.
 function isEmpty(value) {
-  return value === undefined || (typeof value === 'string' && value.trim() === '');
+  return value === undefined || value === null || (typeof value === 'string' && value.trim() === '');
 }
 
 function checkString(field, value, rule, label) {
