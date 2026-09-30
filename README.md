@@ -4,7 +4,7 @@
 
 Bir yazılım ekibinin görevlerini oluşturmasını, çalışanlara atamasını, durum ve önceliklerini takip etmesini, filtrelemesini ve raporlamasını sağlayan REST API.
 
-**Teknolojiler:** Node.js · Express 5 · REST API · Middleware · CRUD · JSON (fs) · Postman
+**Teknolojiler:** Node.js · Express 5 · REST API · Middleware · CRUD · JSON (fs) · Postman · ESLint
 
 ---
 
@@ -78,6 +78,16 @@ npm run dev
 ```
 
 Sunucu varsayılan olarak **http://localhost:3000** adresinde çalışır. Tarayıcıda bu adresi açtığınızda API bilgisi ve endpoint listesi görüntülenir.
+
+### Komutlar
+
+| Komut | Açıklama |
+|---|---|
+| `npm start` | Sunucuyu başlatır |
+| `npm run dev` | Dosya değiştikçe otomatik yeniden başlatır |
+| `npm run seed` | Veriyi 12 örnek görevle sıfırlar |
+| `npm test` | Postman koleksiyonunu Newman ile otomatik çalıştırır |
+| `npm run lint` | Kodu ESLint ile denetler |
 
 ### Ortam Değişkenleri (isteğe bağlı)
 
@@ -231,6 +241,7 @@ Postman test ekran görüntüleri [`docs/screenshots`](docs/screenshots) klasör
 │   ├── seed.js                 # Örnek veriyi yükler
 │   └── run-tests.js            # Postman koleksiyonunu Newman ile çalıştırır
 ├── postman/                    # Postman koleksiyonu
+├── eslint.config.js            # Kod denetimi kuralları
 └── docs/                       # Proje dokümanları ve ekran görüntüleri
 ```
 

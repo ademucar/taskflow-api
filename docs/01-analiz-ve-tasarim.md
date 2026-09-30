@@ -251,6 +251,7 @@ backend-proje/
 │   └── run-tests.js        # Postman koleksiyonunu Newman ile çalıştırır
 ├── postman/                # Postman test koleksiyonu
 ├── docs/                   # Tanıtım, tasarım, API, test dokümanları ve ekran görüntüleri
+├── eslint.config.js        # Kod denetimi (npm run lint)
 ├── package.json
 └── README.md
 ```
