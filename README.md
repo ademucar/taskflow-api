@@ -30,15 +30,20 @@ Bir yazılım ekibinin görevlerini oluşturmasını, çalışanlara atamasını
 
 - [Node.js](https://nodejs.org/) **18 veya üzeri** (`node -v` ile kontrol edebilirsiniz)
 - npm (Node.js ile birlikte gelir)
+- [Git](https://git-scm.com/) (yalnızca `git clone` ile indirmek için)
 
 ### Adımlar
 
 **1. Projeyi indirin**
 
+Git ile:
+
 ```bash
 git clone https://github.com/<kullanici-adi>/taskflow-api.git
 cd taskflow-api
 ```
+
+veya Git olmadan: GitHub sayfasında **Code → Download ZIP** ile indirip klasörü açın ve terminalde o klasöre geçin.
 
 **2. Bağımlılıkları kurun**
 
@@ -58,6 +63,12 @@ npm run seed
 
 ```bash
 npm start
+```
+
+Sunucu başarıyla başladığında konsolda şu satır görünür:
+
+```
+TaskFlow API çalışıyor → http://localhost:3000
 ```
 
 Geliştirme sırasında dosya değiştikçe otomatik yeniden başlatmak için:

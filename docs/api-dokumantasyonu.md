@@ -6,6 +6,8 @@
 ## İçindekiler
 
 - [Genel Kurallar](#genel-kurallar)
+- [Sistem](#sistem)
+  - [GET / — API bilgisi](#get---api-bilgisi)
 - [Görev Modeli](#görev-modeli)
 - [Görev Endpoint'leri](#görev-endpointleri)
   - [POST /tasks — Görev oluştur](#post-tasks--görev-oluştur)
@@ -18,6 +20,9 @@
   - [GET /tasks/search — Görev ara](#get-taskssearch--görev-ara)
   - [GET /tasks/assignee/:assignee — Kişinin görevleri](#get-tasksassigneeassignee--kişinin-görevleri)
 - [Rapor Endpoint'leri](#rapor-endpointleri)
+  - [GET /reports/completed — Tamamlanan görev sayısı](#get-reportscompleted--tamamlanan-görev-sayısı)
+  - [GET /reports/pending — Bekleyen görev sayısı](#get-reportspending--bekleyen-görev-sayısı)
+  - [GET /reports/summary — Genel sistem özeti](#get-reportssummary--genel-sistem-özeti)
 - [Hata Yanıtları](#hata-yanıtları)
 
 ---
@@ -64,6 +69,50 @@
 | `400 Bad Request` | Eksik / geçersiz veri, bozuk JSON, geçersiz parametre |
 | `404 Not Found` | Görev veya endpoint bulunamadı |
 | `500 Internal Server Error` | Beklenmeyen sunucu hatası |
+
+---
+
+## Sistem
+
+### `GET /` — API bilgisi
+
+API'nin adını, sürümünü ve tüm endpoint'lerin listesini döndürür. Sunucunun çalıştığını kontrol etmek için de kullanılabilir.
+
+```http
+GET /
+```
+
+**Yanıt — `200 OK`:**
+
+```json
+{
+  "success": true,
+  "data": {
+    "name": "TaskFlow API",
+    "description": "Görev ve Proje Yönetim Sistemi REST API",
+    "version": "1.0.0",
+    "endpoints": {
+      "tasks": {
+        "list": "GET /tasks",
+        "detail": "GET /tasks/:id",
+        "create": "POST /tasks",
+        "update": "PUT /tasks/:id",
+        "updateStatus": "PATCH /tasks/:id/status",
+        "assign": "PATCH /tasks/:id/assign",
+        "delete": "DELETE /tasks/:id",
+        "search": "GET /tasks/search?keyword=",
+        "byAssignee": "GET /tasks/assignee/:assignee",
+        "queryParams": "status, priority, project, keyword, sort, page, limit"
+      },
+      "reports": {
+        "completed": "GET /reports/completed",
+        "pending": "GET /reports/pending",
+        "summary": "GET /reports/summary"
+      }
+    }
+  }
+}
+```
 
 ---
 
@@ -447,15 +496,58 @@ Belirtilen çalışana atanmış görevleri listeler. Eşleşme büyük / küç�
 GET /tasks/assignee/musa?status=completed
 ```
 
-**Yanıt — `200 OK`:** Liste yanıtı formatında, yalnızca `assignee` değeri `musa` olan görevler. Kişiye ait görev yoksa `count: 0` ve boş `data` döner.
+**Yanıt — `200 OK`:**
+
+```json
+{
+  "success": true,
+  "count": 2,
+  "data": [
+    {
+      "id": 1,
+      "title": "Proje klasör yapısını oluştur",
+      "description": "Katmanlı mimariye uygun src klasörü hazırlanacak.",
+      "status": "completed",
+      "priority": "high",
+      "assignee": "musa",
+      "project": "TaskFlow API",
+      "createdAt": "2026-09-26T01:00:00.000Z",
+      "updatedAt": "2026-09-26T06:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "title": "Express sunucusunu kur",
+      "description": "Express 5 kurulumu ve temel middleware zinciri.",
+      "status": "completed",
+      "priority": "high",
+      "assignee": "musa",
+      "project": "TaskFlow API",
+      "createdAt": "2026-09-26T08:00:00.000Z",
+      "updatedAt": "2026-09-26T13:00:00.000Z"
+    }
+  ]
+}
+```
+
+Kişiye ait görev yoksa hata değil, `count: 0` ve boş `data` döner.
+
+**Olası hatalar:** `400` (kullanıcı adı 2 karakterden kısa, geçersiz sorgu parametresi)
 
 ---
 
 ## Rapor Endpoint'leri
 
-Bekleyen görev: durumu `completed` **olmayan** (`pending` veya `in-progress`) görev.
+Raporlar, o anki tüm görevler üzerinden hesaplanır; parametre almaz. **Bekleyen görev:** durumu `completed` **olmayan** (`pending` veya `in-progress`) görev.
 
 ### `GET /reports/completed` — Tamamlanan görev sayısı
+
+Durumu `completed` olan görevlerin sayısını ve toplam içindeki yüzdesini döndürür.
+
+```http
+GET /reports/completed
+```
+
+**Yanıt — `200 OK`:**
 
 ```json
 {
@@ -469,6 +561,14 @@ Bekleyen görev: durumu `completed` **olmayan** (`pending` veya `in-progress`) g
 ```
 
 ### `GET /reports/pending` — Bekleyen görev sayısı
+
+Henüz tamamlanmamış görevlerin sayısını, `pending` / `in-progress` kırılımını ve bunlardan yüksek öncelikli olanların sayısını döndürür.
+
+```http
+GET /reports/pending
+```
+
+**Yanıt — `200 OK`:**
 
 ```json
 {
@@ -486,6 +586,14 @@ Bekleyen görev: durumu `completed` **olmayan** (`pending` veya `in-progress`) g
 `highPriority`: bekleyen görevlerden önceliği `high` olanların sayısı.
 
 ### `GET /reports/summary` — Genel sistem özeti
+
+Sistemin genel durumunu tek yanıtta verir: toplam / tamamlanan / bekleyen görev sayıları, tamamlanma oranı, duruma ve önceliğe göre dağılım, kişi ve proje bazında ilerleme.
+
+```http
+GET /reports/summary
+```
+
+**Yanıt — `200 OK`:**
 
 ```json
 {
