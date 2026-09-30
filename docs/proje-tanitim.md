@@ -60,7 +60,7 @@ Proje, her katmanın tek bir sorumluluğu olacak şekilde katmanlı mimaride gel
 - **Service:** Filtreleme, arama, sıralama, sayfalama ve rapor hesaplamaları
 - **Repository:** `fs` ile JSON dosyasına okuma / yazma. Yazmalar atomik yapılır ve sıraya alınır; eşzamanlı isteklerde veri kaybı veya dosya bozulması yaşanmaz.
 
-Tüm yanıtlar tutarlı bir formatta döner (`success`, `data`, `message`, `errors`) ve doğru HTTP durum kodları (`200`, `201`, `400`, `404`, `500`) kullanılır.
+Tüm yanıtlar tutarlı bir formatta döner (`success`, `data`, `message`, `errors`) ve doğru HTTP durum kodları (`200`, `201`, `400`, `404`, `413`, `500`) kullanılır.
 
 ## 5. Test
 

@@ -68,6 +68,7 @@
 | `201 Created` | Görev oluşturuldu |
 | `400 Bad Request` | Eksik / geçersiz veri, bozuk JSON, geçersiz parametre |
 | `404 Not Found` | Görev veya endpoint bulunamadı |
+| `413 Payload Too Large` | İstek gövdesi 100 KB'tan büyük |
 | `500 Internal Server Error` | Beklenmeyen sunucu hatası |
 
 ---
@@ -678,6 +679,12 @@ GET /tasks?status=done&limit=500
     { "field": "limit", "message": "limit parametresi en fazla 100 olabilir." }
   ]
 }
+```
+
+### Gövde çok büyük — `413`
+
+```json
+{ "success": false, "message": "İstek gövdesi çok büyük (en fazla 100 KB)." }
 ```
 
 ### Kayıt bulunamadı — `404`

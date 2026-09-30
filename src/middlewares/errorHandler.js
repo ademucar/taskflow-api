@@ -16,6 +16,19 @@ function errorHandler(err, req, res, next) {
     });
   }
 
+  // express.json() varsayılan olarak en fazla 100 KB gövde kabul eder
+  if (err.type === 'entity.too.large') {
+    return res.status(413).json({
+      success: false,
+      message: 'İstek gövdesi çok büyük (en fazla 100 KB).',
+    });
+  }
+
+  // express.json()'dan gelen diğer istemci hataları (desteklenmeyen karakter seti vb.)
+  if (err.expose && err.status >= 400 && err.status < 500) {
+    return res.status(err.status).json({ success: false, message: 'İstek işlenemedi.' });
+  }
+
   if (err instanceof AppError) {
     const body = { success: false, message: err.message };
     if (err.errors) body.errors = err.errors;

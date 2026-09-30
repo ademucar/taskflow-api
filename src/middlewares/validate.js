@@ -46,8 +46,13 @@ function checkString(field, value, rule, label) {
 }
 
 function checkInteger(field, value, rule, label) {
-  // Query ve params değerleri her zaman metin olarak gelir: "2" → 2
-  const number = typeof value === 'string' ? Number(value) : value;
+  // Query ve params değerleri her zaman metin olarak gelir: "2" → 2.
+  // Number() "1e1", "0x10", "+5" gibi değerleri de sayıya çevirdiği için
+  // metin yalnızca rakamlardan oluşmalıdır.
+  if (typeof value === 'string' && !/^-?\d+$/.test(value.trim())) {
+    return `${field} ${label} tam sayı olmalıdır.`;
+  }
+  const number = Number(value);
 
   if (!Number.isInteger(number)) return `${field} ${label} tam sayı olmalıdır.`;
   if (rule.min !== undefined && number < rule.min) {

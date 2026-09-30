@@ -17,6 +17,11 @@ const config = require('../config');
 fs.mkdirSync(path.dirname(config.logFile), { recursive: true });
 const logStream = fs.createWriteStream(config.logFile, { flags: 'a' });
 
+// Log dosyası yazılamazsa (izin, disk dolu vb.) sunucu çökmez; konsola uyarı düşülür.
+logStream.on('error', (err) => {
+  console.error(`Log dosyasına yazılamadı (${config.logFile}): ${err.message}`);
+});
+
 const useColors = process.stdout.isTTY;
 const COLORS = { red: 31, green: 32, yellow: 33, cyan: 36, gray: 90 };
 

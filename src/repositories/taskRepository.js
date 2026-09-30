@@ -12,12 +12,21 @@ const config = require('../config');
 const EMPTY_STORE = { lastId: 0, tasks: [] };
 
 async function readStore() {
+  let raw;
   try {
-    const raw = await fs.readFile(config.dataFile, 'utf8');
-    return JSON.parse(raw);
+    raw = await fs.readFile(config.dataFile, 'utf8');
   } catch (err) {
     if (err.code === 'ENOENT') return structuredClone(EMPTY_STORE);
     throw err;
+  }
+
+  try {
+    return JSON.parse(raw);
+  } catch {
+    // Dosya elle düzenlenip bozulduysa sorunun kaynağını açıkça belirt
+    throw new Error(
+      `Veri dosyası geçerli bir JSON değil: ${config.dataFile}. Düzeltin veya "npm run seed" ile sıfırlayın.`,
+    );
   }
 }
 

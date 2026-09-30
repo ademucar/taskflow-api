@@ -164,6 +164,7 @@ Sistemin tek varlığı **Görev (Task)**'tir. Görevin atandığı çalışan, 
 | **201** Created | Görev oluşturuldu |
 | **400** Bad Request | Eksik / geçersiz veri, bozuk JSON, geçersiz id |
 | **404** Not Found | Görev veya endpoint bulunamadı |
+| **413** Payload Too Large | İstek gövdesi 100 KB'tan büyük |
 | **500** Internal Server Error | Beklenmeyen sunucu hatası |
 
 ---

@@ -101,6 +101,11 @@ Postman koleksiyonuna ek olarak geliştirme sırasında şu durumlar da test edi
 | `limit=500` | `400` — en fazla 100 ✅ |
 | Boş veride raporlar | Tüm sayılar 0, hata yok ✅ |
 | Logger çıktısı | Her istek konsola ve `logs/requests.log` dosyasına yazıldı ✅ |
+| 100 KB'tan büyük istek gövdesi | `413`, açıklayıcı mesaj ✅ |
+| Tam sayı gibi görünen geçersiz id / sayfa (`1e1`, `0x10`, `+5`) | `400` ✅ |
+| Bozuk `tasks.json` dosyası | Konsolda dosya yolunu ve çözümü (`npm run seed`) gösteren mesaj, istemciye `500` ✅ |
+| Log dosyası yazılamıyor | Sunucu çökmüyor, konsola uyarı düşülüyor ✅ |
+| Port zaten kullanımda | Anlaşılır hata mesajı ve farklı port önerisi ✅ |
 | Yanıt gönderilmeden kopan istek | Logger'da `aborted` olarak kaydedildi, sunucu etkilenmedi ✅ |
 
 ---
