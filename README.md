@@ -207,16 +207,48 @@ Test senaryolarının yazılı açıklaması: **[Test Dokümantasyonu](docs/test
 
 ### Test Ekran Görüntüleri
 
-Postman test ekran görüntüleri [`docs/screenshots`](docs/screenshots) klasöründedir.
+Koleksiyonun Postman **Collection Runner** ile çalıştırılması: 30 istek, **131 testin tamamı geçti, 0 hata**.
 
-| Test | Ekran Görüntüsü |
-|---|---|
-| Görev ekleme | [01-gorev-ekle.png](docs/screenshots/01-gorev-ekle.png) |
-| Görev listeleme | [02-gorevleri-listele.png](docs/screenshots/02-gorevleri-listele.png) |
-| Görev detayı | [03-gorev-detayi.png](docs/screenshots/03-gorev-detayi.png) |
-| Görev güncelleme | [04-gorev-guncelle.png](docs/screenshots/04-gorev-guncelle.png) |
-| Görev silme | [05-gorev-sil.png](docs/screenshots/05-gorev-sil.png) |
-| Koleksiyon çalıştırma sonucu | [06-collection-runner.png](docs/screenshots/06-collection-runner.png) |
+![Postman Collection Runner sonucu](docs/screenshots/06-collection-runner.png)
+
+CRUD uçlarının tek tek Postman testleri (görmek için başlığa tıklayın):
+
+<details>
+<summary><b>1. Görev Ekle</b> — <code>POST /tasks</code> → 201 Created · 7/7 test</summary>
+
+![Görev ekleme](docs/screenshots/01-gorev-ekle.png)
+
+</details>
+
+<details>
+<summary><b>2. Görevleri Listele</b> — <code>GET /tasks</code> → 200 OK · 5/5 test</summary>
+
+![Görev listeleme](docs/screenshots/02-gorevleri-listele.png)
+
+</details>
+
+<details>
+<summary><b>3. Görev Detayı</b> — <code>GET /tasks/:id</code> → 200 OK · 4/4 test</summary>
+
+![Görev detayı](docs/screenshots/03-gorev-detayi.png)
+
+</details>
+
+<details>
+<summary><b>4. Görev Güncelle</b> — <code>PUT /tasks/:id</code> → 200 OK · 5/5 test</summary>
+
+![Görev güncelleme](docs/screenshots/04-gorev-guncelle.png)
+
+</details>
+
+<details>
+<summary><b>5. Görev Sil</b> — <code>DELETE /tasks/:id</code> → 200 OK · 4/4 test</summary>
+
+![Görev silme](docs/screenshots/05-gorev-sil.png)
+
+</details>
+
+Tüm görüntüler: [`docs/screenshots`](docs/screenshots)
 
 ---
 

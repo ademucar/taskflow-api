@@ -123,4 +123,12 @@ Postman koleksiyonuna ek olarak geliştirme sırasında şu durumlar da test edi
 └─────────────────────────┴──────────┴──────────┘
 ```
 
-Tüm test senaryoları başarıyla geçmiştir. Postman ekran görüntüleri [`docs/screenshots`](screenshots) klasöründedir.
+Tüm test senaryoları başarıyla geçmiştir. Koleksiyon Postman uygulamasında **Collection Runner** ile de çalıştırılmış ve aynı sonuç alınmıştır: **131 test geçti, 0 hata** ([ekran görüntüsü](screenshots/06-collection-runner.png)).
+
+| CRUD testi | Ekran görüntüsü |
+|---|---|
+| C-01 Görev ekleme | [01-gorev-ekle.png](screenshots/01-gorev-ekle.png) |
+| C-02 Görev listeleme | [02-gorevleri-listele.png](screenshots/02-gorevleri-listele.png) |
+| C-03 Görev detayı | [03-gorev-detayi.png](screenshots/03-gorev-detayi.png) |
+| C-04 Görev güncelleme | [04-gorev-guncelle.png](screenshots/04-gorev-guncelle.png) |
+| C-07 Görev silme | [05-gorev-sil.png](screenshots/05-gorev-sil.png) |
