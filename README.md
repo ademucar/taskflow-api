@@ -39,7 +39,7 @@ Bir yazılım ekibinin görevlerini oluşturmasını, çalışanlara atamasını
 Git ile:
 
 ```bash
-git clone https://github.com/<kullanici-adi>/taskflow-api.git
+git clone https://github.com/ademucar/taskflow-api.git
 cd taskflow-api
 ```
 
